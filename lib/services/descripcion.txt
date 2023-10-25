@@ -1,0 +1,1 @@
+contiene la lógica detras de la aplicación, por ejemplo: el proceso de autenticación.

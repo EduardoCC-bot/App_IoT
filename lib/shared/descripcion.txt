@@ -1,0 +1,1 @@
+contiene recursos/widgets y características compartidas entre varios widgets y pantallas

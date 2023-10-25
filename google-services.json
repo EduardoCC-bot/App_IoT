@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "222631281614",
+    "project_id": "casaiot-ff526",
+    "storage_bucket": "casaiot-ff526.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222631281614:android:5e65148e54c1227914619f",
+        "android_client_info": {
+          "package_name": "com.example.proyectoiot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSanRw5qnar1d5rnZ3VikH0tSWm1pGiYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

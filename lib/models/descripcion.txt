@@ -1,0 +1,2 @@
+Carpeta usada para crear los modelos o clases de los objetos que se usarán
+en el programa.
