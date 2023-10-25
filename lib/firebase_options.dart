@@ -55,6 +55,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '222631281614',
     projectId: 'casaiot-ff526',
     authDomain: 'casaiot-ff526.firebaseapp.com',
+    databaseURL: 'https://casaiot-ff526-default-rtdb.firebaseio.com/',
     storageBucket: 'casaiot-ff526.appspot.com',
   );
 
@@ -63,6 +64,7 @@ class DefaultFirebaseOptions {
     appId: '1:222631281614:android:5e65148e54c1227914619f',
     messagingSenderId: '222631281614',
     projectId: 'casaiot-ff526',
+    databaseURL: 'https://casaiot-ff526-default-rtdb.firebaseio.com/',
     storageBucket: 'casaiot-ff526.appspot.com',
   );
 }

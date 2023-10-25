@@ -1,0 +1,1 @@
+contiene las pantallas referentes al HOME de la aplicación
