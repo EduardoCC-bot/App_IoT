@@ -26,9 +26,9 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? const Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Color(0xFFE9EEF0),
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Color(0xFF393b3a),
         elevation: 0.0,
         title: const Text('LogIn'),
         actions: <Widget>[
@@ -69,7 +69,7 @@ class _LogInState extends State<LogIn> {
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
+                style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF767674)),
                 child: const Text(
                   'LogIn',
                   style: TextStyle(color: Colors.white),
