@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 
+//------------------------------------------------------------
+//Clase encargada de la lectura en tiempo real de los sensores 
+//------------------------------------------------------------
+
 class SensorMonitor {
   final DatabaseReference reference = FirebaseDatabase.instance.ref();
   final Map<String, String> _sensorData = <String, String>{};

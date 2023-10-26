@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/shared/sensors_display.dart';
+import 'package:proyectoiot/special_widgets/sensors_display.dart';
 import 'package:proyectoiot/services/auth.dart';
 
+//------------------------------------------------------------
+//Pantalla de prueba que muestra los datos de los sensores en tiempo real.
+//------------------------------------------------------------
 
 class HomeTest extends StatefulWidget {
   const HomeTest({Key? key}) : super(key: key);

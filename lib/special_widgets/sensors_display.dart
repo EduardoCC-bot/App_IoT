@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import '../services/sensor_monitor.dart';
 
+//----------------------------------------------------------------------
+//Futuro display de sensores en tiempo real. Ya funciona en feo
+//----------------------------------------------------------------------
+
+
 class SensorDisplay extends StatefulWidget {
+  // ignore: use_super_parameters
   const SensorDisplay({Key? key}) : super(key: key);
 
   @override

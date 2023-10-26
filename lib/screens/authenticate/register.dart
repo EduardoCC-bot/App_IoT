@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/services/auth.dart';
 import 'package:proyectoiot/shared/constants.dart';
 
+//------------------------------------------------------------
+//Pantalla para registrarse en la aplicación/Firebase
+//------------------------------------------------------------
+
+
 class Register extends StatefulWidget {
 
   final Function? toggleView;
@@ -24,17 +29,17 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Color(0xFFE9EEF0),
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Color(0xFF393b3a),
         elevation: 0.0,
         title: const Text('Register'),
         actions: <Widget>[
           TextButton.icon(
-            icon: const Icon(Icons.person, color: Colors.black),
+            icon: const Icon(Icons.person, color: Color(0xFFE9EEF0)),
             label : const Text(
               'LogIn',
-              style: TextStyle(color: Colors.black)
+              style: TextStyle(color: Color(0xFFE9EEF0))
             ),
             onPressed: () {
               widget.toggleView!();
@@ -67,7 +72,7 @@ class _RegisterState extends State<Register> {
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
+                style: ElevatedButton.styleFrom(backgroundColor:  Color(0xFF767674)),
                 child: const Text(
                   'Register',
                   style: TextStyle(color: Colors.white),

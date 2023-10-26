@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyectoiot/models/user_model.dart';
 
+//------------------------------------------------------------
+//Clase encargada del proceso de autenticación (login, register, logout)
+//------------------------------------------------------------
+
 class AuthService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;

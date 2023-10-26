@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/screens/authenticate/register.dart';
 import 'package:proyectoiot/screens/authenticate/login.dart';
 
+//------------------------------------------------------------
+//Widget encargado de alternar entre Register y LogIn
+//------------------------------------------------------------
+
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});
 

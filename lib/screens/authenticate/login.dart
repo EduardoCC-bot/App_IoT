@@ -3,6 +3,10 @@ import 'package:proyectoiot/services/auth.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/shared/loading.dart';
 
+//------------------------------------------------------------
+//Pantalla para logearse en la aplicación/Firebase
+//------------------------------------------------------------
+
 class LogIn extends StatefulWidget {
 
   final Function? toggleView;
@@ -33,10 +37,10 @@ class _LogInState extends State<LogIn> {
         title: const Text('LogIn'),
         actions: <Widget>[
           TextButton.icon(
-            icon: const Icon(Icons.person, color: Colors.black),
+            icon: const Icon(Icons.person, color: Color(0xFFE9EEF0)),
             label : const Text(
               'Register',
-              style: TextStyle(color: Colors.black)
+              style: TextStyle(color: Color(0xFFE9EEF0))
             ),
             onPressed: () {
               widget.toggleView!();
