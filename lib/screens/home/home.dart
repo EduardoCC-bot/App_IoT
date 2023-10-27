@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../special_widgets/drawer_menu.dart';
+import '../../special_widgets/sensors_display.dart';
 
 //------------------------------------------------------------
 //HOME. Pantalla a la que se accede una vez autentificado
@@ -28,6 +29,14 @@ class _HomeState extends State<Home> {
         title: const Text('HOME'),
         backgroundColor: const Color(0xFF0f1b35),
         elevation: 0.0,
+      ),
+      body: const Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,  // Alinear widgets al inicio
+        children: [
+          SizedBox(height: 100),
+          SensorDisplay(),
+        ],
       ),
     );
   }

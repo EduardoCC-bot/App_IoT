@@ -7,8 +7,8 @@ import 'package:firebase_database/firebase_database.dart';
 
 class SensorMonitor {
   final DatabaseReference reference = FirebaseDatabase.instance.ref();
-  final Map<String, String> _sensorData = <String, String>{};
-  StreamController<Map<String, String>>? _controller;
+  final Map<String, num> _sensorData = <String, num>{};
+  StreamController<Map<String, num>>? _controller;
   final List<StreamSubscription<DatabaseEvent>> _subscriptions = [];  // Lista para almacenar las suscripciones
 
   static final SensorMonitor _singleton = SensorMonitor._internal();
@@ -37,10 +37,10 @@ class SensorMonitor {
 
     for (final path in sensorPaths) {
       StreamSubscription<DatabaseEvent> subscription = reference.child(path).onValue.listen((event) {
-          final value = event.snapshot.value.toString();
           final sensorName = path.split('_').last;
+          final value = num.tryParse(event.snapshot.child(sensorName).value.toString()) ?? 0.0;
           _sensorData[sensorName] = value;
-          _controller!.add(Map<String, String>.from(_sensorData));  // Emitir una copia del mapa
+          _controller!.add(Map<String, num>.from(_sensorData));  // Emitir una copia del mapa
       });
       _subscriptions.add(subscription);
     }
@@ -54,6 +54,6 @@ class SensorMonitor {
     print("cerrado monitor");
   }
 
-  Stream<Map<String, String>> get stream => _controller!.stream;
+  Stream<Map<String, num>> get stream => _controller!.stream;
 
 }

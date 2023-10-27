@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../services/sensor_monitor.dart';
+import 'sensor_icon.dart';
 
 //----------------------------------------------------------------------
-//Futuro display de sensores en tiempo real. Ya funciona en feo
+//Display de todos los sensores en tiempo real
 //----------------------------------------------------------------------
 
 
@@ -33,7 +34,7 @@ class SensorDisplayState extends State<SensorDisplay> {
   
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Map<String, String>>(
+    return StreamBuilder<Map<String, num>>(
       stream: monitor.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -42,18 +43,27 @@ class SensorDisplayState extends State<SensorDisplay> {
         if (!snapshot.hasData) {
           return const Text('No data');
         }
-        
+
         final sensorData = snapshot.data!;
-        return ListView(
-          children: sensorData.entries.map((entry) {
-            final sensorName = entry.key;
-            final value = entry.value;
-            return ListTile(
-              title: Text('$sensorName: $value'),
-            );
-          }).toList(),
+
+        return SizedBox (
+          height: 90,
+          child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: sensorData.keys.length,
+          itemBuilder: (context, index) {
+            final key = sensorData.keys.elementAt(index);
+            final value = sensorData[key];
+            
+            // Pasando el valor al IconoTextoWidget
+            return SizedBox(
+              width: 90,
+              child: SensorIconText(sensorName: key, value: value!));
+            },
+          )
         );
       },
     );
   }
 }
+

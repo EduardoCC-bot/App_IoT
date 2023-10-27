@@ -17,28 +17,51 @@ final drawer = Drawer(
     children: <Widget>[
       userIcon,
       const Text("Usuario", style: drawerTextStyle),
-      
+      divider,
       ListTile(
         tileColor: const Color(0xFFadd6f2),
-        leading: Icon(Icons.priority_high, color: Colors.grey[100]),
-        title: const Text('Notificaciones', style: TextStyle(color: Color(0xFFffffff)),),
+        leading: Icon(Icons.notifications, color: Colors.grey[100]),
+        title: const Text(
+          'Notificaciones', 
+          style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFffffff)
+          )
+        ),
         onTap: () => print('Home'),
       ),
+      divider,
       ListTile(
         tileColor: const Color(0xFFadd6f2),
         leading: Icon(Icons.settings, color: Colors.grey[100]),
-        title: const Text('Configuración', style: TextStyle(color: Color(0xFFffffff)),),
+        title: const Text(
+          'Configuraciones', 
+          style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFffffff)
+          )
+        ),
         onTap: () => print('Configuración'), 
       ),
+      divider,
       ListTile(
         tileColor: const Color(0xFFadd6f2),
         leading: Icon(Icons.logout, color: Colors.grey[100]),
-        title: const Text('Cerrar sesión', style: TextStyle(color: Color(0xFFffffff)),),
+        title: const Text(
+          'Cerrar sesión', 
+          style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFffffff)
+          )
+        ),
         onTap: () async {
           await _auth.signOut();
         },
       ),
-      
+      divider,
       // .. Agregar más elementos de lista aquí
     
     
