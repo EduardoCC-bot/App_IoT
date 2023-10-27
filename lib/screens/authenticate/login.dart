@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/services/auth.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/shared/loading.dart';
+import 'package:proyectoiot/images_icons/logo_icon.dart';
 
 //------------------------------------------------------------
 //Pantalla para logearse en la aplicación/Firebase
@@ -30,9 +31,9 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? const Loading() : Scaffold(
-      backgroundColor: Color(0xFFE9EEF0),
+      backgroundColor: Color(0xFFF6F6F6),
       appBar: AppBar(
-        backgroundColor: Color(0xFF393b3a),
+        backgroundColor: Color(0xFF0f1b35),
         elevation: 0.0,
         title: const Text('LogIn'),
         actions: <Widget>[
@@ -54,6 +55,7 @@ class _LogInState extends State<LogIn> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              logoIcon,
               const SizedBox(height: 20.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Email'),

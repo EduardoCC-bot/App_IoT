@@ -16,7 +16,7 @@ final drawer = Drawer(
     padding: EdgeInsets.zero,
     children: <Widget>[
       userIcon,
-      const Text("Usuario", style: drawerTextStyle),
+      const Text("Perfil", style: drawerTextStyle),
       divider,
       ListTile(
         tileColor: const Color(0xFFadd6f2),

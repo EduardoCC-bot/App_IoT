@@ -30,14 +30,14 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color(0xFF0f1b35),
         elevation: 0.0,
       ),
-      body: const Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,  // Alinear widgets al inicio
-        children: [
-          SizedBox(height: 100),
-          SensorDisplay(),
-        ],
-      ),
+      body:Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,  // Alinear widgets al inicio
+          children: [
+            SizedBox(height: 100),
+            SensorDisplay(),
+          ],
+        ),
     );
   }
 }

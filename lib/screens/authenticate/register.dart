@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/services/auth.dart';
 import 'package:proyectoiot/shared/constants.dart';
+import 'package:proyectoiot/images_icons/register_icon.dart';
 
 //------------------------------------------------------------
 //Pantalla para registrarse en la aplicación/Firebase
@@ -24,14 +25,18 @@ class _RegisterState extends State<Register> {
   //estado de campo de texto
   String email = '';
   String password = '';
+  String nombre = '';
+  String apm = '';
+  String app = '';
+  int edad = 0;
   String error = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE9EEF0),
+      backgroundColor: Color(0xFFF6F6F6),
       appBar: AppBar(
-        backgroundColor: Color(0xFF393b3a),
+        backgroundColor: Color(0xFF0f1b35),
         elevation: 0.0,
         title: const Text('Register'),
         actions: <Widget>[
@@ -53,6 +58,58 @@ class _RegisterState extends State<Register> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              registerIcon,
+              const SizedBox(height: 20.0),
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Nombre'),
+                validator: (val) => val!.isEmpty ? 'Complete the field' : null,
+                onChanged: (val){
+                  setState(() => nombre = val);
+                }
+              ),
+              const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2 -20, // La mitad del ancho de la pantalla con un pequeño espacio de separación
+                    child: TextFormField(
+                      decoration: textInputDecoration.copyWith(hintText: 'Apellido Paterno'),
+                      validator: (val) => val!.isEmpty ? 'Complete the field' : null,
+                      onChanged: (val) {
+                        setState(() => app = val);
+                      },
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2 -20, // La mitad del ancho de la pantalla con un pequeño espacio de separación
+                    child: TextFormField(
+                      decoration: textInputDecoration.copyWith(hintText: 'Apellido Materno'),
+                      validator: (val) => val!.isEmpty ? 'Complete the field' : null,
+                      onChanged: (val) {
+                        setState(() => apm = val);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Edad'),
+                keyboardType: TextInputType.number,
+                validator: (val){
+                    if (val!.isEmpty) {
+                      return 'Complete the field';
+                    }
+                    if (!isNumeric(val)) {
+                      return 'Ingrese solo números';
+                    }
+                    return null; // Devuelve null si no hay errores de validación
+                  },
+                onChanged: (val){
+                  setState(() => edad = int.parse(val));
+                }
+              ),
               const SizedBox(height: 20.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Email'),
@@ -101,4 +158,11 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+}
+
+bool isNumeric(String value) {
+  if (value == null) {
+    return false;
+  }
+  return double.tryParse(value) != null;
 }
