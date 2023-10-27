@@ -80,8 +80,8 @@ IconData getIconoHumedad(num value){
     if(value >= 50){
       return Icons.water;
     } else if(value >= 20){
-      return Icons.grass;
+      return Icons.water_drop;
     }else{
-      return Icons.shower;
+      return Icons.format_color_reset;
     }
 }

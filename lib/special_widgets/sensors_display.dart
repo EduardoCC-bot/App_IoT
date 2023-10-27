@@ -41,7 +41,7 @@ class SensorDisplayState extends State<SensorDisplay> {
           return Text('Error: ${snapshot.error}');
         }
         if (!snapshot.hasData) {
-          return const Text('No data');
+          return const Text('Cargando...');
         }
 
         final sensorData = snapshot.data!;

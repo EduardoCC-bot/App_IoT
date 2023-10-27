@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color(0xFF0f1b35),
         elevation: 0.0,
       ),
-      body:Column(
+      body: const Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,  // Alinear widgets al inicio
           children: [
