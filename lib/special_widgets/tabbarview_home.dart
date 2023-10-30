@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/screens/home/garage.dart';
+import '../screens/home/space_devices.dart';
+//----------------------------------------------------------------------
+//Contiene la pantalla correspondiente a cada espacio
+//----------------------------------------------------------------------
 
 class TabBarViewHome extends StatefulWidget {
   const TabBarViewHome({super.key});
@@ -15,11 +18,11 @@ class _TabBarViewHomeState extends State<TabBarViewHome> {
 
       children: <Widget>[
         Center(child: Text('Contenido de Tab 1')),
-        Center(child: Text('Contenido de Tab 2')),
-        Center(child: Text('Contenido de Tab 3')),
-        Center(child: Text('Contenido de Tab 4')),
-        Center(child: Text('Contenido de Tab 5')),
-        Garage()
+        DevicesInASpace(space: "Entrada"),
+        DevicesInASpace(space: "Cocina"),
+        DevicesInASpace(space: "Habitacion"),
+        DevicesInASpace(space: "Jardin"),
+        DevicesInASpace(space: "Garage")
       ]
     );
   }

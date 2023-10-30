@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 
-final logoIcon = Container (
+final loginIcon = Container (
   width: 200,
   height: 200,
   margin: const EdgeInsets.only(top: 20, bottom: 20),

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 //------------------------------------------------------------
 
 final userIcon = Container (
-  width: 150,
-  height: 150,
+  width: 160,
+  height: 160,
   margin: const EdgeInsets.only(top: 20, bottom: 20),
   child : ClipRRect(
     child: Center(

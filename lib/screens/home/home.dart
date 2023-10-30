@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/special_widgets/tabbar_home.dart';
-import 'package:proyectoiot/special_widgets/tabbarview_home.dart';
+import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';
 import '../../special_widgets/sensors_display.dart';
+import '../../special_widgets/tabbar_home.dart';
+import '../../special_widgets/tabbarview_home.dart';
 
 //------------------------------------------------------------
 //HOME. Pantalla a la que se accede una vez autentificado

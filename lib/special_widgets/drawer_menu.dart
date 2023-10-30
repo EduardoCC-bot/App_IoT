@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/images_icons/user_icon.dart';
-import 'package:proyectoiot/shared/constants.dart';
+import '../images_icons/user_icon.dart';
 import '../services/auth.dart';
+import '../shared/constants.dart';
 
 //------------------------------
 //Widget del Menú lateral/Drawer
@@ -21,8 +21,8 @@ final drawer = Drawer(
         ),
         child: userIcon,
       ),
-      //const Text("Perfil", style: drawerTextStyle),
-      ListTile(
+
+      ListTile( //tile de notificaciones
         tileColor: colorBlanco,
         leading: const Icon(Icons.notifications, color: color_11),
         title: const Text(
@@ -32,7 +32,7 @@ final drawer = Drawer(
         onTap: () => print('Notificaciones'),
       ),
       divider,
-      ListTile(
+      ListTile( //tile de configuraciones
         tileColor: colorBlanco,
         leading: const Icon(Icons.settings, color: color_11),
         title: const Text(
@@ -42,7 +42,7 @@ final drawer = Drawer(
         onTap: () => print('Configuración'), 
       ),
       divider,
-      ListTile(
+      ListTile(      //tile de cerrar sesión
         tileColor: colorBlanco,
         leading: const Icon(Icons.logout, color: color_11),
         title: const Text(
@@ -56,7 +56,7 @@ final drawer = Drawer(
       divider,
       // .. Agregar más elementos de lista aquí
     
-    
+  
     ],
   ),
 );

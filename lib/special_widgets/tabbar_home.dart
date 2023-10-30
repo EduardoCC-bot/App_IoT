@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/shared/constants.dart';
+import '../shared/constants.dart';
+
+//----------------------------------------------------------------------
+//Widget que muestra la barra deslizable entre los distintos espacios
+//----------------------------------------------------------------------
 
 class TabBarHome extends StatefulWidget {
   const TabBarHome({super.key});

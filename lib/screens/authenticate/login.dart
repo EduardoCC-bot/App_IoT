@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/services/auth.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/screens/loading.dart';
-import 'package:proyectoiot/images_icons/logo_icon.dart';
+import 'package:proyectoiot/images_icons/login_icon.dart';
 
 //------------------------------------------------------------
 //Pantalla para logearse en la aplicación/Firebase
@@ -55,7 +55,7 @@ class _LogInState extends State<LogIn> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              logoIcon,
+              loginIcon,
               const SizedBox(height: 20.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Correo electrónico'),

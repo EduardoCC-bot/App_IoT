@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/shared/constants.dart';
+import '../shared/constants.dart';
 import '../shared/functions.dart';
 
 //----------------------------------------------------------------------

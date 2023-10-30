@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-//funciones para obtener el icono correspondiente a cada sensor según su valor
+//----------------------------------------------------------------------
+//Archivo que contiene funciones utilizadas en distintas clases
+//----------------------------------------------------------------------
 
+//funciones para obtener el icono y escala correspondiente a cada sensor
 IconData getIconForValor(String sensorName, num value) {
     switch (sensorName) {
       case 'temperatura':
@@ -66,6 +69,6 @@ String getValueWithEscale(String sensorName, num value){
     case 'humedad':
       return "$value%";
     default:
-      return "$value"; // ícono por defecto en caso de que no se reconozca el texto
+      return "$value"; //  defecto en caso de que no se reconozca el texto
   }
 }

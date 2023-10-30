@@ -1,27 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoiot/shared/constants.dart';
 
-// ignore: must_be_immutable
+//----------------------------------------------------------------------
+// Widget switch. Utilizado para controlar los dispositivos en tiempo real
+//----------------------------------------------------------------------
+
+
 class SwitchDevices extends StatefulWidget {
-  SwitchDevices({super.key, required this.isSwitched});
-  bool isSwitched;
+  final bool isSwitched;
+  final ValueChanged<bool> onChanged;
+  SwitchDevices({Key? key, required this.isSwitched, required this.onChanged}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _SwitchDevicesState createState() => _SwitchDevicesState();
 }
 
 class _SwitchDevicesState extends State<SwitchDevices> {
+  late bool _isSwitched;
 
+  @override
+  void initState() {
+    super.initState();
+    _isSwitched = widget.isSwitched;
+  }
+
+  @override
+  void didUpdateWidget(covariant SwitchDevices oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isSwitched != widget.isSwitched) {
+      _isSwitched = widget.isSwitched;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Switch(
-      value: widget.isSwitched,
+      value: _isSwitched,
+      activeColor: color_11,
+      activeTrackColor: color_13,
+      inactiveThumbColor: color_2,
+      inactiveTrackColor: color_4,
       onChanged: (value) {
         setState(() {
-          widget.isSwitched = value;
-          print(widget.isSwitched);  // Puedes imprimir o realizar alguna acción dependiendo del estado.
+          _isSwitched = value;
         });
+        widget.onChanged(_isSwitched);  // Notifica a la clase padre sobre el cambio.
+        print(_isSwitched);  
       },
     );
   }
