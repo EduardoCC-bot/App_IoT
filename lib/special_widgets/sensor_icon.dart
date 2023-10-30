@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../shared/constants.dart';
+import 'package:proyectoiot/shared/constants.dart';
+import '../shared/functions.dart';
 
 //----------------------------------------------------------------------
 //Widget individual por cada sensor. Contiene un icono y su valor en tiempo real
@@ -26,24 +27,23 @@ class SensorIconTextState extends State<SensorIconText> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
+          decoration: const BoxDecoration(
+            color: color_4,//Colors.grey[200],
             shape: BoxShape.circle,
           ),
           padding: const EdgeInsets.all(16.0),
           child: Icon(
-            getIconoPorTexto(widget.sensorName, widget.value),
-            color: const Color(0xFF767674),
+            getIconForValor(widget.sensorName, widget.value),
+            color: color_0,
             size: 30.0,
           ),
         ),
         const SizedBox(height: 8.0),
         Text(
-          widget.value.toString(),
+          getValueWithEscale(widget.sensorName, widget.value),
           style: const TextStyle(
-            color: Color(0xFF0f1b35),
+            color: color_0,
             fontSize: 15.0,
-            fontWeight: FontWeight.bold,
           ),
         ),
       ],

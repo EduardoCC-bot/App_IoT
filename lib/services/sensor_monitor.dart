@@ -36,7 +36,7 @@ class SensorMonitor {
     ];
 
     for (final path in sensorPaths) {
-      StreamSubscription<DatabaseEvent> subscription = reference.child(path).onValue.listen((event) {
+      StreamSubscription<DatabaseEvent> subscription = reference.child("Casa/$path").onValue.listen((event) {
           final sensorName = path.split('_').last;
           final value = num.tryParse(event.snapshot.child(sensorName).value.toString()) ?? 0.0;
           _sensorData[sensorName] = value;

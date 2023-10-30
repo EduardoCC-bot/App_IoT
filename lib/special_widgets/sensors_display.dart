@@ -47,7 +47,7 @@ class SensorDisplayState extends State<SensorDisplay> {
         final sensorData = snapshot.data!;
 
         return SizedBox (
-          height: 90,
+          height: 100,
           child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: sensorData.keys.length,
@@ -57,7 +57,7 @@ class SensorDisplayState extends State<SensorDisplay> {
             
             // Pasando el valor al IconoTextoWidget
             return SizedBox(
-              width: 90,
+              width: 94,
               child: SensorIconText(sensorName: key, value: value!));
             },
           )

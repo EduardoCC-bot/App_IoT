@@ -5,17 +5,12 @@ import 'package:flutter/material.dart';
 //------------------------------------------------------------
 
 final userIcon = Container (
-  width: 100,
-  height: 100,
+  width: 150,
+  height: 150,
   margin: const EdgeInsets.only(top: 20, bottom: 20),
   child : ClipRRect(
-    borderRadius  : BorderRadius.circular(20.0), // Ajusta el valor según el radio de curvatura que desees
-    child: Container(
-      color: const Color(0xFFffffff), // Color de fondo
-      child: Center(
-        child: Image.network("https://cdn-icons-png.flaticon.com/512/2910/2910721.png"),
-      ),
+    child: Center(
+      child: Image.network("https://cdn-icons-png.flaticon.com/512/3135/3135715.png"),
     ),
   ),
 );
-

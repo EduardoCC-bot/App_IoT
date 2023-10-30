@@ -34,17 +34,17 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
+      backgroundColor: colorBlanco,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0f1b35),
+        backgroundColor: color_1,
         elevation: 5.0,
         title: const Text('Registrarse'),
         actions: <Widget>[
           TextButton.icon(
-            icon: const Icon(Icons.person, color: Color(0xFFE9EEF0)),
+            icon: const Icon(Icons.person, color: colorBlanco),
             label : const Text(
               'Acceder',
-              style: TextStyle(color: Color(0xFFE9EEF0))
+              style: TextStyle(color: colorBlanco)
             ),
             onPressed: () {
               widget.toggleView!();
@@ -130,10 +130,10 @@ class _RegisterState extends State<Register> {
                 ),
                 const SizedBox(height: 20.0),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor:const Color(0xFF767674)),
+                  style: ElevatedButton.styleFrom(backgroundColor: color_11),
                   child: const Text(
                     'Registrarse',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: colorBlanco),
                     ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()){

@@ -13,6 +13,7 @@ void main() async {
   );
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         value: AuthService().user,
         child: const MaterialApp(
         home: Wrapper(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
