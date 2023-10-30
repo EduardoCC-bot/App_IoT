@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoiot/screens/home/settings.dart';
 import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';
 import '../../special_widgets/sensors_display.dart';
 import '../../special_widgets/tabbar_home.dart';
 import '../../special_widgets/tabbarview_home.dart';
-
+import '../../screens/home/principalScreen.dart';
 //------------------------------------------------------------
 //HOME. Pantalla a la que se accede una vez autentificado
 //------------------------------------------------------------
@@ -37,17 +38,8 @@ class _HomeState extends State<Home> {
           backgroundColor: color_1,
           elevation: 5.0,
         ),
-        body: const Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,  // Alinear widgets al inicio
-            children: <Widget>[
-              SizedBox(height: 80),
-              SensorDisplay(),
-              SizedBox(height: 20),
-              TabBarHome(),
-              Expanded(child: TabBarViewHome())
-            ],
-          ),
+        body: principalScreen()//_getDrawerItemWidget(_selectScreen),
+        
       )
     );
   }

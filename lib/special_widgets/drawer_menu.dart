@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../images_icons/user_icon.dart';
 import '../services/auth.dart';
 import '../shared/constants.dart';
+import '../screens/home/principalScreen.dart';
+import '../screens/home/settings.dart';
 
 //------------------------------
 //Widget del Menú lateral/Drawer
@@ -10,7 +12,7 @@ import '../shared/constants.dart';
 
 final AuthService _auth = AuthService();
 
-final drawer = Drawer(
+final drawer = Drawer(  
   backgroundColor: colorBlanco,
   child: ListView(
     padding: EdgeInsets.zero,
@@ -39,7 +41,10 @@ final drawer = Drawer(
           'Configuraciones', 
           style: drawerTextStyle
         ),
-        onTap: () => print('Configuración'), 
+        onTap: (){
+          print('Configuración');
+          return ;
+        }, 
       ),
       divider,
       ListTile(      //tile de cerrar sesión
@@ -60,3 +65,12 @@ final drawer = Drawer(
     ],
   ),
 );
+
+
+ getDrawerItemWidget(int pantalla){
+    switch(pantalla){
+      case 0:  return principalScreen();
+      case 1: return settings();
+      default: return null;
+    }
+  }
