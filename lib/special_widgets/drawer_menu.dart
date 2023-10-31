@@ -1,3 +1,4 @@
+import 'dart:js';
 import 'package:flutter/material.dart';
 import '../images_icons/user_icon.dart';
 import '../services/auth.dart';
@@ -31,7 +32,10 @@ final drawer = Drawer(
           'Notificaciones', 
           style: drawerTextStyle
         ),
-        onTap: () => print('Notificaciones'),
+        onTap: (){
+          //Navigator.of(context).pop();
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => settings()));
+        },
       ),
       divider,
       ListTile( //tile de configuraciones
@@ -42,8 +46,9 @@ final drawer = Drawer(
           style: drawerTextStyle
         ),
         onTap: (){
-          print('Configuración');
-          return ;
+          
+          //Navigator.of(context).pop();
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => settings()));
         }, 
       ),
       divider,

@@ -18,16 +18,34 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int selectedDrawerItem = 0;
+
+  void onDrawerItemTapped(int itemIndex){
+    setState(() {
+      selectedDrawerItem = itemIndex;
+    });
+  }
 
   @override
   void dispose() {
     super.dispose();
   }
 
+  Widget buildScreen() {
+    switch(selectedDrawerItem){
+      case 0:
+        return principalScreen();
+      case 1:
+        return settings();
+      default:
+        return Center(child: Text('Opción no válida'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+          length: 6,
       child: Scaffold(
         backgroundColor: colorBlanco,
         drawer:  drawer,
@@ -37,10 +55,10 @@ class _HomeState extends State<Home> {
           //leading: const Icon(Icons.home),
           backgroundColor: color_1,
           elevation: 5.0,
-        ),
-        body: principalScreen()//_getDrawerItemWidget(_selectScreen),
-        
-      )
+        ), 
+        body: buildScreen(),
+      ),      
     );
   }
+
 }
