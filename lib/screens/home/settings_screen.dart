@@ -7,11 +7,6 @@ import 'package:proyectoiot/special_widgets/switch.dart';
 //------------------------------------------------------------
 
 
-//valores que obtendremos al hacer la conexion con la base de datos
-String nombre = '';
-String apellidoP = '';
-String apellidoM = '';
-int edad = 0;
 bool status = false;
 
 
@@ -50,24 +45,19 @@ class Settings extends StatelessWidget{
             ),
           const SizedBox(height: 10),
           Container(
-              color: Colors.blue,
-              child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.dark_mode, color: color_11,) ,
-                    Text("Modo obscuro"),
-                  ] 
+            color: Colors.blue,
+            child: ListTile(
+              leading: const Icon(Icons.dark_mode_outlined, color: color_11),
+                title: const Text(
+                'Modo Obscuro',
                 ),
-                SwitchDevices(
+                trailing: SwitchDevices(
                   isSwitched: true, // Proporciona el valor inicial del switch
                   onChanged: (bool newValue) {
                     // Maneja el cambio de estado del switch aquí
-                    print('Nuevo estado del Switch: $newValue');
+                    print('Nuevo estado del Switch: $newValue'); 
                   },
                 ),
-              ],
             ),
           ),
         ],
