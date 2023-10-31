@@ -18,9 +18,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int selectedDrawerItem = 0;
+  int selectedDrawerItem = 1;
 
-  void onDrawerItemTapped(int itemIndex){
+  void onDrawerItemTapped(int itemIndex) {
     setState(() {
       selectedDrawerItem = itemIndex;
     });
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
           length: 6,
       child: Scaffold(
         backgroundColor: colorBlanco,
-        drawer:  drawer,
+        drawer:  AppDrawer(onDrawerItemTapped: onDrawerItemTapped),
         appBar: AppBar(
           title: const Text('Inicio'),
           centerTitle: true,
