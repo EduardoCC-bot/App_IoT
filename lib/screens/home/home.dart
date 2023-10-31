@@ -6,6 +6,7 @@ import '../../special_widgets/sensors_display.dart';
 import '../../special_widgets/tabbar_home.dart';
 import '../../special_widgets/tabbarview_home.dart';
 import '../../screens/home/principalScreen.dart';
+import '../home/Notification.dart';
 //------------------------------------------------------------
 //HOME. Pantalla a la que se accede una vez autentificado
 //------------------------------------------------------------
@@ -36,6 +37,8 @@ class _HomeState extends State<Home> {
       case 0:
         return principalScreen();
       case 1:
+        return notification();
+      case 2:
         return settings();
       default:
         return Center(child: Text('Opción no válida'));

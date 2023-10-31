@@ -26,6 +26,19 @@ class AppDrawer extends StatelessWidget {
         child: userIcon,
         ),
 
+        ListTile(
+          tileColor: colorBlanco,
+          leading: const Icon(Icons.home, color: color_11),
+          title: const Text(
+            'Inicio',
+            style: drawerTextStyle,
+          ),
+          onTap: () {
+            onDrawerItemTapped(0); // Indicar la selección de la opción 0
+            Navigator.of(context).pop();
+          },
+        ),
+        divider,
         ListTile( //tile de notificaciones
         tileColor: colorBlanco,
         leading: const Icon(Icons.notifications, color: color_11),
@@ -34,7 +47,7 @@ class AppDrawer extends StatelessWidget {
           style: drawerTextStyle
         ),
         onTap: (){              
-              onDrawerItemTapped(0); // Indicar la selección de la opción 0
+              onDrawerItemTapped(1); // Indicar la selección de la opción 0
               Navigator.of(context).pop();
         },
         ),
@@ -47,7 +60,7 @@ class AppDrawer extends StatelessWidget {
           style: drawerTextStyle
         ),
         onTap: (){
-          onDrawerItemTapped(1); // Indicar la selección de la opción 1
+          onDrawerItemTapped(2); // Indicar la selección de la opción 1
           Navigator.of(context).pop();
         }, 
         ),
