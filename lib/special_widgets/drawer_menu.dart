@@ -1,4 +1,3 @@
-import 'dart:js';
 import 'package:flutter/material.dart';
 import '../images_icons/user_icon.dart';
 import '../services/auth.dart';
@@ -10,7 +9,7 @@ final AuthService _auth = AuthService();
 class AppDrawer extends StatelessWidget {
   final Function(int) onDrawerItemTapped;
 
-  AppDrawer({required this.onDrawerItemTapped});
+  const AppDrawer({super.key, required this.onDrawerItemTapped});
 
   @override
   Widget build(BuildContext context) {

@@ -1,30 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/screens/home/settings.dart';
+import 'package:proyectoiot/screens/home/settings_screen.dart';
 import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';
-import '../../special_widgets/sensors_display.dart';
-import '../../special_widgets/tabbar_home.dart';
-import '../../special_widgets/tabbarview_home.dart';
-import '../../screens/home/principalScreen.dart';
-import '../home/Notification.dart';
+import 'principal_screen.dart';
+import 'notification_screen.dart';
 //------------------------------------------------------------
 //HOME. Pantalla a la que se accede una vez autentificado
 //------------------------------------------------------------
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  int selectedDrawerItem = 1;
+  int selectedDrawerItem = 0;
+  String header='Inicio';
 
   void onDrawerItemTapped(int itemIndex) {
-    setState(() {
-      selectedDrawerItem = itemIndex;
-    });
+    String newHeader;
+    switch(itemIndex) {
+    case 0:
+      newHeader = 'Inicio';
+      break;
+    case 1:
+      newHeader = 'Notificaciones';
+      break;
+    case 2:
+      newHeader = 'Configuraciones';
+      break;
+    default:
+      newHeader = 'Opción no válida';
+      break;
+  }
+
+  setState(() {
+    selectedDrawerItem = itemIndex;
+    header = newHeader;
+  });
   }
 
   @override
@@ -35,13 +50,13 @@ class _HomeState extends State<Home> {
   Widget buildScreen() {
     switch(selectedDrawerItem){
       case 0:
-        return principalScreen();
+        return const PrincipalScreen();
       case 1:
-        return notification();
+        return const NotificationScreen();
       case 2:
-        return settings();
+        return const Settings();
       default:
-        return Center(child: Text('Opción no válida'));
+        return const Center(child: Text('Opción no válida'));
     }
   }
 
@@ -53,7 +68,7 @@ class _HomeState extends State<Home> {
         backgroundColor: colorBlanco,
         drawer:  AppDrawer(onDrawerItemTapped: onDrawerItemTapped),
         appBar: AppBar(
-          title: const Text('Inicio'),
+          title: Text(header),
           centerTitle: true,
           //leading: const Icon(Icons.home),
           backgroundColor: color_1,

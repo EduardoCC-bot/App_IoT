@@ -22,7 +22,7 @@ class _DevicesInASpace extends State<DevicesInASpace> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DatabaseEvent>(
-      stream: reference.child("Casa/${widget.space}").onValue,
+      stream: reference.child("Casa/${widget.space}/Dispositivos").onValue,
       builder: (context, snapshot){
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -52,7 +52,8 @@ class _DevicesInASpace extends State<DevicesInASpace> {
               setState(() {
                 status = value;
               });
-              reference.child("Casa/${widget.space}/$key").set({'estado': status});
+              reference.child("Casa/${widget.space}/Dispositivos/$key").set({'estado': status});
+              reference.child("Casa/${widget.space}/Ultimo_modificado").update({'dispositivo':key,'estado': status});
             },
           ),  // Muestra el nombre del dispositivo, un switch y su estado
         );
