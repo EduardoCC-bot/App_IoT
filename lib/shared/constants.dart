@@ -24,8 +24,7 @@ const drawerTextStyle = TextStyle(
 );
 
 //formato para las líneas divider
-const divider = Divider(
-      color: color_0,//especificar el color 
+const divider = Divider(//especificar el color 
       height: 1.0, // Altura del Divider
       thickness: 0.5,
 );
@@ -36,6 +35,7 @@ const color_1= Color(0xFF75b1ff);
 const color_2= Color(0xFFa1c4ff);
 const color_3= Color(0xFFc5d8ff);
 const color_4= Color(0xFFe5eeff);
+const color_5= Color.fromARGB(255, 239, 245, 255);
 const colorBlanco= Color(0xFFFFFFFF);
 
 const color_10= Color(0xFF652a00);

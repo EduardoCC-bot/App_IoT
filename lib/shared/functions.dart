@@ -72,3 +72,34 @@ String getValueWithEscale(String sensorName, num value){
       return "$value"; //  defecto en caso de que no se reconozca el texto
   }
 }
+//-----------------------------------------------------
+//función para separar una cadena timestamp en fecha y hora
+List<String> splitTimeStamp(String timestamp){
+  List<String> timestampParts = timestamp.split('_');
+  List<String> dateAndHour = [];
+  String date = '${timestampParts[2]}/${timestampParts[1]}/${timestampParts[0]}';
+  String hour = '${timestampParts[3]}:${timestampParts[4]}:${timestampParts[5]}';
+  dateAndHour.add(date);
+  dateAndHour.add(hour);
+  return dateAndHour;
+}
+
+//función para obtener el título de la AppBar
+String getAppBarTitle(int itemIndex){
+  String newHeader;
+  switch(itemIndex) {
+    case 0:
+      newHeader = 'Inicio';
+      break;
+    case 1:
+      newHeader = 'Notificaciones';
+      break;
+    case 2:
+      newHeader = 'Configuraciones';
+      break;
+    default:
+      newHeader = 'Opción no válida';
+      break;
+  }
+  return newHeader;
+}

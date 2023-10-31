@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+//------------------------------------------------------------
+//Pantalla de configuraciones
+//------------------------------------------------------------
 
 class Settings extends StatelessWidget{
   const Settings({super.key});

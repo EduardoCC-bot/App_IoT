@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/screens/home/settings_screen.dart';
+import 'package:proyectoiot/shared/functions.dart';
 import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';
 import 'principal_screen.dart';
 import 'notification_screen.dart';
 //------------------------------------------------------------
-//HOME. Pantalla a la que se accede una vez autentificado
+//HOME. Pantalla contenedora a la que se accede una vez autentificado
 //------------------------------------------------------------
 
 class Home extends StatefulWidget {
@@ -20,25 +21,9 @@ class _HomeState extends State<Home> {
   String header='Inicio';
 
   void onDrawerItemTapped(int itemIndex) {
-    String newHeader;
-    switch(itemIndex) {
-    case 0:
-      newHeader = 'Inicio';
-      break;
-    case 1:
-      newHeader = 'Notificaciones';
-      break;
-    case 2:
-      newHeader = 'Configuraciones';
-      break;
-    default:
-      newHeader = 'Opción no válida';
-      break;
-  }
-
   setState(() {
     selectedDrawerItem = itemIndex;
-    header = newHeader;
+    header = getAppBarTitle(itemIndex);
   });
   }
 
