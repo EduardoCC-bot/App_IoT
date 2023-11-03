@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/settings_icon.dart';
 import 'package:proyectoiot/special_widgets/switch.dart';
+import 'package:proyectoiot/screens/settings/profile_screen.dart';
+import 'package:proyectoiot/screens/settings/houseDetails_screen.dart';
 //------------------------------------------------------------
 //Pantalla de configuraciones
 //------------------------------------------------------------
+
 
 
 bool status = false;
@@ -22,7 +25,7 @@ class Settings extends StatelessWidget{
             const SizedBox(height: 20),
             settingsIcon,
             ElevatedButton(onPressed: () {
-                print('Detalles de perfil');
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => profile_screen()));
               }, 
               child: const ListTile(
                 leading: Icon(Icons.person_2, color: color_11),
@@ -34,7 +37,7 @@ class Settings extends StatelessWidget{
             const SizedBox(height: 10),
 
             ElevatedButton(onPressed: () {
-                print('Detalles de casa');
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => houseDetails_screen()));
               }, 
               child: const ListTile(
                 leading: Icon(Icons.other_houses, color: color_11),
