@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/services/auth.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/register_icon.dart';
+import 'package:proyectoiot/shared/functions.dart';
+import 'package:proyectoiot/special_widgets/dropdown_button.dart';
 
 //------------------------------------------------------------
 //Pantalla para registrarse en la aplicación/Firebase
@@ -21,15 +23,25 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  List<String> list = <String>['One', 'Two', 'Three', 'Four']; 
+  String dropdownValue = '';
   bool loading = false;
+
   //estado de campo de texto
   String email = '';
   String password = '';
-  String nombre = '';
+  String name = '';
   String apm = '';
   String app = '';
-  int edad = 0;
+  int age = 0;
   String error = '';
+  int telephone = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = list.first; // Ahora puedes acceder a 'list' porque estamos en un método y no en el inicializador
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,75 +72,127 @@ class _RegisterState extends State<Register> {
             child: Column(
               children: <Widget>[
                 registerIcon,
-                //const SizedBox(height: 20.0),
-                TextFormField(
-                  decoration: textInputDecoration.copyWith(hintText: 'Nombre'),
-                  validator: (val) => val!.isEmpty ? 'Complete el campo' : null,
-                  onChanged: (val){
-                    setState(() => nombre = val);
-                  }
+//-------------------------------------------------------------------------------------------------------------------                
+                Row(
+                  mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+                  children:[
+                    Flexible(
+                      flex: 4,
+                      child: formBox('Nombre', 'Complete el campo', context,(val) => setState(() => name = val)),
+                    ),
+                    const SizedBox(width: 7),
+                    Flexible(
+                        flex: 1,
+                        child: TextFormField(
+                        decoration: textInputDecoration.copyWith(hintText: 'Edad'),
+                        keyboardType: TextInputType.number,
+                        validator: (val){
+                            if (val!.isEmpty) {
+                              return 'Complete el campo';
+                            }
+                            if (!isNumeric(val)) {
+                              return 'Solo números';
+                            }
+                            return null; // Devuelve null si no hay errores de validación
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            try {
+                              age = int.parse(val);
+                            } catch (e) {
+                              print('Ingresa solo números');
+                            }
+                          });
+                        },
+                      )
+                    )
+                  ]
                 ),
+//-------------------------------------------------------------------------------------------------------------------                
                 const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 -20, // La mitad del ancho de la pantalla con un pequeño espacio de separación
-                      child: TextFormField(
-                        decoration: textInputDecoration.copyWith(hintText: 'Apellido Paterno'),
-                        validator: (val) => val!.isEmpty ? 'Complete el campo' : null,
-                        onChanged: (val) {
-                          setState(() => app = val);
-                        },
-                      ),
+                    Flexible(
+                      flex: 1,
+                      child: formBox('Apellido materno', 'Complete el campo', context, (val) => setState(() => apm = val)),
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2 -20, // La mitad del ancho de la pantalla con un pequeño espacio de separación
-                      child: TextFormField(
-                        decoration: textInputDecoration.copyWith(hintText: 'Apellido Materno'),
-                        validator: (val) => val!.isEmpty ? 'Complete el campo' : null,
-                        onChanged: (val) {
-                          setState(() => apm = val);
-                        },
-                      ),
+                    const SizedBox(width: 7),
+                    Flexible(
+                      flex: 1,
+                      child: formBox('Apellido paterno', 'Complete el campo', context,(val) => setState(() => app = val)),
                     ),
                   ],
                 ),
+//-------------------------------------------------------------------------------------------------------------------                
                 const SizedBox(height: 20.0),
-                TextFormField(
-                  decoration: textInputDecoration.copyWith(hintText: 'Edad'),
-                  keyboardType: TextInputType.number,
-                  validator: (val){
-                      if (val!.isEmpty) {
-                        return 'Complete el campo';
-                      }
-                      if (!isNumeric(val)) {
-                        return 'Ingrese solo números';
-                      }
-                      return null; // Devuelve null si no hay errores de validación
-                    },
-                  onChanged: (val){
-                    setState(() => edad = int.parse(val));
-                  }
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: dropDownOptions((String? value) => setState(() => dropdownValue = value!), list,dropdownValue, 'Lada')
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                        flex: 5,
+                        child: TextFormField(
+                        decoration: textInputDecoration.copyWith(hintText: 'Teléfono'),
+                        keyboardType: TextInputType.number,
+                        validator: (val){
+                            if (val!.isEmpty) {
+                              return 'Complete el campo';
+                            }
+                            if (!isNumeric(val)) {
+                              return 'Solo números';
+                            }
+                            return null; // Devuelve null si no hay errores de validación
+                        },
+                        onChanged: (val) {
+                          setState(() {
+                            try {
+                              telephone = int.parse(val);
+                            } catch (e) {
+                              print('Ingresa solo números');
+                            }
+                          });
+                        },
+                      )
+                    )
+                  ],
                 ),
+//-------------------------------------------------------------------------------------------------------------------                
                 const SizedBox(height: 20.0),
-                TextFormField(
-                  decoration: textInputDecoration.copyWith(hintText: 'Correo electrónico'),
-                  validator: (val) => val!.isEmpty ? 'Ingrese un correo electrónico' : null,
-                  onChanged: (val){
-                    setState(() => email = val);
-                  }
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                          flex: 1,
+                          child: formBox('Correo electrónico', 'Complete el campo', context, (val) => setState(() => email = val)),
+                    )
+                  ]
                 ),
+//-------------------------------------------------------------------------------------------------------------------                
                 const SizedBox(height: 20.0),
-                TextFormField(
-                  decoration: textInputDecoration.copyWith(hintText: 'Contraseña'),
-                  validator: (val) => val!.length < 6 ? 'Debe contener 6 o más carácteres' : null,
-                  obscureText: true,
-                  onChanged: (val){
-                    setState(() => password = val);
-                  }
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                    flex: 1,
+                    child: TextFormField(
+                      decoration: textInputDecoration.copyWith(hintText: 'Contraseña'),
+                      validator: (val) => val!.length < 6 ? 'Debe contener 6 o más carácteres' : null,
+                      obscureText: true,
+                      onChanged: (val){
+                        setState(() => password = val);
+                       }
+                      )
+                    )
+                  ]
                 ),
+//-------------------------------------------------------------------------------------------------------------------                
                 const SizedBox(height: 20.0),
+
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: color_11),
                   child: const Text(
@@ -148,6 +212,7 @@ class _RegisterState extends State<Register> {
                     }
                   },
                   ),
+
                   const SizedBox(height: 12.0),
                   Text(
                     error,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'constants.dart';
 
 //----------------------------------------------------------------------
 //Archivo que contiene funciones utilizadas en distintas clases
@@ -102,4 +105,34 @@ String getAppBarTitle(int itemIndex){
       break;
   }
   return newHeader;
+}
+
+
+typedef OnChangedCallback = void Function(String value);
+TextFormField formBox (String hintText, String error, BuildContext context, OnChangedCallback onChangedCallback){
+ return TextFormField(
+      decoration: textInputDecoration.copyWith(hintText: hintText),
+      validator: (val) => val!.isEmpty ? error : null,
+      onChanged: onChangedCallback,
+  );
+}
+
+
+Future<List<String>> getLada() async {
+  var url = Uri.parse('http://189.131.88.67/api/v1/sql?db=SQL&crud=SELECT&dest=Lada');
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      return data.map((r) => r.toString()).toList();
+    } else {
+      // ignore: avoid_print
+      print('Petición fallida: ${response.statusCode}.');
+      return [];
+    }
+  } catch (e) {
+    // ignore: avoid_print
+    print(e.toString());
+    return [];
+  }
 }

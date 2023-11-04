@@ -53,7 +53,8 @@ class _LogInState extends State<LogIn> {
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: SingleChildScrollView(
+            child: Column(
             children: <Widget>[
               loginIcon,
               const SizedBox(height: 20.0),
@@ -97,6 +98,7 @@ class _LogInState extends State<LogIn> {
                   style: const TextStyle(color: Colors.red)
                 )
             ],
+           )
           )
         )
       ),
