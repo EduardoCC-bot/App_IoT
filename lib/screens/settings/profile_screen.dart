@@ -19,14 +19,14 @@ void getResp() async{
     print(data);
 }
 
-class profile_screen extends StatelessWidget {
-   
-  
-   @override
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles de perfil de usuario'),
+        title: const Text('Perfil'),
           centerTitle: true,
           backgroundColor: color_1,
           elevation: 5.0,

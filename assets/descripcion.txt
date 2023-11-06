@@ -1,1 +1,0 @@
-Carpeta para guardar las imágenes que serán utilizadas en la app

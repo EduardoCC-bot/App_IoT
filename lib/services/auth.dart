@@ -16,8 +16,7 @@ class AuthService{
 
   //corriente de cambios en autenticacion del usuario
   Stream<UserModel?> get user {
-    return _auth.authStateChanges()
-    .map(_userFromFirebaseUser);
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
   //registrarse por anónimo

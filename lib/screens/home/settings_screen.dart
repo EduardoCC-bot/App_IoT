@@ -3,68 +3,62 @@ import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/settings_icon.dart';
 import 'package:proyectoiot/special_widgets/switch.dart';
 import 'package:proyectoiot/screens/settings/profile_screen.dart';
-import 'package:proyectoiot/screens/settings/houseDetails_screen.dart';
+import 'package:proyectoiot/screens/settings/house_details_screen.dart';
 //------------------------------------------------------------
 //Pantalla de configuraciones
 //------------------------------------------------------------
 
-
-
-bool status = false;
-
-
-class Settings extends StatelessWidget{
+class Settings extends StatefulWidget{
   const Settings({super.key});
 
   @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  bool status = false;
+  @override
   Widget build(BuildContext context){
     return Column(
-         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch, 
-        children: [
-            const SizedBox(height: 20),
-            settingsIcon,
-            ElevatedButton(onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => profile_screen()));
-              }, 
-              child: const ListTile(
-                leading: Icon(Icons.person_2, color: color_11),
-                title: Text(
-                'Detalles de perfil',
-                ),
-              )
-            ),
-            const SizedBox(height: 10),
-
-            ElevatedButton(onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => houseDetails_screen()));
-              }, 
-              child: const ListTile(
-                leading: Icon(Icons.other_houses, color: color_11),
-                title: Text(
-                'Detalles de casa',
-                ),
-              )
-            ),
-          const SizedBox(height: 10),
-          Container(
-            color: Colors.blue,
-            child: ListTile(
-              leading: const Icon(Icons.dark_mode_outlined, color: color_11),
-                title: const Text(
-                'Modo Obscuro',
-                ),
-                trailing: SwitchDevices(
-                  isSwitched: true, // Proporciona el valor inicial del switch
-                  onChanged: (bool newValue) {
-                    // Maneja el cambio de estado del switch aquí
-                    print('Nuevo estado del Switch: $newValue'); 
-                  },
-                ),
-            ),
+      mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center, 
+    children: [
+        const SizedBox(height: 30),
+        settingsIcon,
+        const SizedBox(height: 15),
+        const Divider(),
+        ListTile(
+            leading: const Icon(Icons.person_2, color: color_11),
+            title: const Text('Detalles de perfil', style:  TextStyle(color: color_0)),
+            tileColor: color_5,
+            onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+            },
+        ),
+        const Divider(),
+        ListTile(
+            leading: const Icon(Icons.other_houses, color: color_11),
+            title: const Text('Detalles de casa', style:  TextStyle(color: color_0)),
+            tileColor: color_5,
+            onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HouseDetailsScreen()));
+            },
+        ), 
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.dark_mode, color: color_11),
+          title: const Text('Modo oscuro', style:  TextStyle(color: color_0)),
+          tileColor: color_5,
+          onTap: () {setState(() { status = !status; print('Nuevo estado del Switch: $status'); });},
+          trailing: SwitchDevices(
+            isSwitched: status, // Proporciona el valor inicial del switch
+            onChanged:(value) {
+              status = value;
+            },
           ),
-        ],
-
+        ),
+        const Divider(),
+      ],
     );
   }
 }
