@@ -39,8 +39,8 @@ const color_5= Color.fromARGB(255, 239, 245, 255);
 const colorBlanco= Color(0xFFFFFFFF);
 
 const color_10= Color(0xFF652a00);
-const color_11= Color(0xFFfdc165);
-const color_12= Color(0xFFfed17e);
-const color_13= Color(0xFFfff0af) ;
+const color_11= Color.fromARGB(255, 254, 198, 68);
+const color_12= Color.fromARGB(255, 255, 209, 122);
+const color_13= Color.fromARGB(255, 255, 235, 145);
 const color_14= Color(0xFFfee096);
 const color_15= Color(0xFFffffc7);

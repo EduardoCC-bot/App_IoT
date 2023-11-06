@@ -9,9 +9,10 @@ import 'package:proyectoiot/shared/constants.dart';
 class SwitchDevices extends StatefulWidget {
   final bool isSwitched;
   final ValueChanged<bool> onChanged;
-  SwitchDevices({Key? key, required this.isSwitched, required this.onChanged}) : super(key: key);
+  const SwitchDevices({super.key, required this.isSwitched, required this.onChanged});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SwitchDevicesState createState() => _SwitchDevicesState();
 }
 

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'constants.dart';
 
 //----------------------------------------------------------------------
 //Archivo que contiene funciones utilizadas en distintas clases
@@ -102,4 +105,60 @@ String getAppBarTitle(int itemIndex){
       break;
   }
   return newHeader;
+}
+
+bool isNumeric(String? value) {
+  if (value == null) {
+    return false;
+  }
+  return double.tryParse(value) != null;
+}
+
+bool isValidEmail(String email) {
+  final emailRegex = RegExp(
+    r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
+  );
+  return emailRegex.hasMatch(email);
+}
+
+typedef OnChangedCallback = void Function(String value);
+TextFormField formBox (String hintText, String error, BuildContext context, OnChangedCallback onChangedCallback){
+ return TextFormField(
+      decoration: textInputDecoration.copyWith(hintText: hintText),
+      validator: (val) => val!.isEmpty ? error : null,
+      onChanged: onChangedCallback,
+  );
+}
+
+/*
+Future<void> getLada() async {
+  var url = Uri.parse('http://189.131.88.67/api/v1/sql');
+  Map data = {
+    'db':'SQL',
+    'crud': 'SELECT',
+    'data': {
+      "Lada": '*'
+    }
+  };
+  var body = json.encode(data);
+  try {
+    final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
+    print("${response.body}");
+    print("${response.statusCode}");
+  } catch (e) {
+    // ignore: avoid_print
+    print(e.toString());
+  }
+}*/
+
+Future<void> getLada() async {
+  var url = Uri.parse('http://189.131.88.67/api/v1/sql?db=SQL&crud&SELECT&data=lada:*');
+  try {
+    final response = await http.get(url, headers: {"Content-Type": "application/json"});
+    print("${response.body}");
+    print("${response.statusCode}");
+  } catch (e) {
+    // ignore: avoid_print
+    print(e.toString());
+  }
 }
