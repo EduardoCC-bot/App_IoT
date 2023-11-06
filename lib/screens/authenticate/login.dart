@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/services/auth.dart';
-import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/screens/loading.dart';
-import 'package:proyectoiot/images_icons/login_icon.dart';
+import '../../images_icons/login_icon.dart';
+import '../../services/auth.dart';
+import '../../shared/constants.dart';
+import '../loading.dart';
 
 //------------------------------------------------------------
 //Pantalla para logearse en la aplicación/Firebase
@@ -11,7 +11,7 @@ import 'package:proyectoiot/images_icons/login_icon.dart';
 class LogIn extends StatefulWidget {
 
   final Function? toggleView;
-  const LogIn({Key? key, this.toggleView}): super(key: key);
+  const LogIn({super.key, this.toggleView});
 
   @override
   State<LogIn> createState() => _LogInState();
@@ -56,6 +56,7 @@ class _LogInState extends State<LogIn> {
           child: SingleChildScrollView(
             child: Column(
             children: <Widget>[
+              const SizedBox(height: 10),
               loginIcon,
               const SizedBox(height: 20.0),
               TextFormField(

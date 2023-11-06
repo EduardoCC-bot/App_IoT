@@ -8,18 +8,20 @@ String apellidoP = '';
 String apellidoM = '';
 int edad = 0;
 
-class profile_screen extends StatelessWidget {
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles de perfil de usuario'),
+        title: const Text('Perfil'),
           centerTitle: true,
           backgroundColor: color_1,
           elevation: 5.0,
 
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

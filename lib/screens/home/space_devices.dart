@@ -28,7 +28,7 @@ class _DevicesInASpace extends State<DevicesInASpace> {
           return Text('Error: ${snapshot.error}');
         }
         if(!snapshot.hasData){
-          return const Center(child: Text('Cargando...'));
+          return const Center(child: Text(''));
         } 
 
         final DatabaseEvent event = snapshot.data!;

@@ -16,10 +16,10 @@ class PrincipalScreen extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,  // Alinear widgets al inicio
         children: <Widget>[
-          const SizedBox(height: 30),
+          const SizedBox(height: 35),
           HouseName(name: "Casa inteligente"),
           const SensorDisplay(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           const TabBarHome(),
           const Expanded(child: TabBarViewHome())
         ],

@@ -8,7 +8,7 @@ final settingsIcon = Container (
   margin: const EdgeInsets.only(top: 0, bottom: 20),
   child : ClipRRect(
       child: Center(
-        child: Image.network("https://cdn-icons-png.flaticon.com/512/771/771203.png"),
+        child: Image.asset("images/settings.png"),
       ),
   ),
 );

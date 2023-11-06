@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/services/auth.dart';
+import 'package:proyectoiot/models/registry.dart';
+import 'package:proyectoiot/screens/authenticate/register_screens/join_or_create.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/register_icon.dart';
 import 'package:proyectoiot/shared/functions.dart';
@@ -13,7 +14,7 @@ import 'package:proyectoiot/special_widgets/dropdown_button.dart';
 class Register extends StatefulWidget {
 
   final Function? toggleView;
-  const Register({Key? key, this.toggleView}): super(key: key);
+  const Register({super.key, this.toggleView});
   
   @override
   State<Register> createState() => _RegisterState();
@@ -21,30 +22,23 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
-  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   List<String> list = <String>['One', 'Two', 'Three', 'Four']; 
-  String dropdownValue = '';
-  bool loading = false;
 
   //estado de campo de texto
-  String email = '';
-  String password = '';
-  String name = '';
-  String apm = '';
-  String app = '';
-  int age = 0;
+  Registry registry = Registry('', '', '', '', '', 0, '', 0);
+  bool loading = false;
   String error = '';
-  int telephone = 0;
 
   @override
   void initState() {
     super.initState();
-    dropdownValue = list.first; // Ahora puedes acceder a 'list' porque estamos en un método y no en el inicializador
+    registry.lada = list.first; // Ahora puedes acceder a 'list' porque estamos en un método y no en el inicializador
   }
 
   @override
   Widget build(BuildContext context) {
+    //getLada();
     return Scaffold(
       backgroundColor: colorBlanco,
       appBar: AppBar(
@@ -78,7 +72,7 @@ class _RegisterState extends State<Register> {
                   children:[
                     Flexible(
                       flex: 4,
-                      child: formBox('Nombre', 'Complete el campo', context,(val) => setState(() => name = val)),
+                      child: formBox('Nombre', 'Complete el campo', context,(val) => setState(() => registry.name = val)),
                     ),
                     const SizedBox(width: 7),
                     Flexible(
@@ -93,12 +87,15 @@ class _RegisterState extends State<Register> {
                             if (!isNumeric(val)) {
                               return 'Solo números';
                             }
+                            if (int.parse(val) >90 || int.parse(val) < 8 ) {
+                              return 'No es una edad válida';
+                            }
                             return null; // Devuelve null si no hay errores de validación
                         },
                         onChanged: (val) {
                           setState(() {
                             try {
-                              age = int.parse(val);
+                              registry.age = int.parse(val);
                             } catch (e) {
                               print('Ingresa solo números');
                             }
@@ -115,12 +112,12 @@ class _RegisterState extends State<Register> {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: formBox('Apellido materno', 'Complete el campo', context, (val) => setState(() => apm = val)),
+                      child: formBox('Apellido paterno', 'Complete el campo', context, (val) => setState(() => registry.app = val)),
                     ),
                     const SizedBox(width: 7),
                     Flexible(
                       flex: 1,
-                      child: formBox('Apellido paterno', 'Complete el campo', context,(val) => setState(() => app = val)),
+                      child: formBox('Apellido materno', 'Complete el campo', context,(val) => setState(() => registry.apm = val)),
                     ),
                   ],
                 ),
@@ -131,7 +128,7 @@ class _RegisterState extends State<Register> {
                   children: [
                     Flexible(
                       flex: 2,
-                      child: dropDownOptions((String? value) => setState(() => dropdownValue = value!), list,dropdownValue, 'Lada')
+                      child: dropDownOptions((String? value) => setState(() => registry.lada = value!), list, registry.lada, 'Lada')
                     ),
                     const SizedBox(width: 6),
                     Flexible(
@@ -146,12 +143,15 @@ class _RegisterState extends State<Register> {
                             if (!isNumeric(val)) {
                               return 'Solo números';
                             }
+                            if(val.toString().length>8 || val.toString().length<7){
+                               return 'Longitud incorrecta';
+                            }
                             return null; // Devuelve null si no hay errores de validación
                         },
                         onChanged: (val) {
                           setState(() {
                             try {
-                              telephone = int.parse(val);
+                              registry.telephone = int.parse(val);
                             } catch (e) {
                               print('Ingresa solo números');
                             }
@@ -167,8 +167,22 @@ class _RegisterState extends State<Register> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Flexible(
-                          flex: 1,
-                          child: formBox('Correo electrónico', 'Complete el campo', context, (val) => setState(() => email = val)),
+                        flex: 1,
+                        child: TextFormField(
+                        decoration: textInputDecoration.copyWith(hintText: 'Correo Electrónico'),
+                        validator: (val){
+                            if (val!.isEmpty) {
+                              return 'Complete el campo';
+                            }
+                            if (!isValidEmail(val)) {
+                              return 'Email no válido';
+                            }
+                            return null; // Devuelve null si no hay errores de validación
+                        },
+                        onChanged:(val) {
+                          setState(() => registry.email = val);
+                        },
+                      )
                     )
                   ]
                 ),
@@ -184,7 +198,7 @@ class _RegisterState extends State<Register> {
                       validator: (val) => val!.length < 6 ? 'Debe contener 6 o más carácteres' : null,
                       obscureText: true,
                       onChanged: (val){
-                        setState(() => password = val);
+                        setState(() => registry.password = val);
                        }
                       )
                     )
@@ -196,23 +210,17 @@ class _RegisterState extends State<Register> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: color_11),
                   child: const Text(
-                    'Registrarse',
+                    'Continuar',
                     style: TextStyle(color: colorBlanco),
                     ),
-                  onPressed: () async {
+                  onPressed: () {
                     if (_formKey.currentState!.validate()){
-                      setState(() => loading = true);
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password);
-                      if(result == null){
-                        setState(() {
-                          error = 'Ingrese un correo eléctronico válido';
-                          loading = false;
-                          });
-                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => JoinOrCreate(registry: registry),
+                      ));
                     }
-                  },
+                  }
                   ),
-
                   const SizedBox(height: 12.0),
                   Text(
                     error,
@@ -225,11 +233,4 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
-}
-
-bool isNumeric(String? value) {
-  if (value == null) {
-    return false;
-  }
-  return double.tryParse(value) != null;
 }
