@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoiot/models/registry.dart';
 import '../../images_icons/login_icon.dart';
 import '../../services/auth.dart';
 import '../../shared/constants.dart';
@@ -18,14 +19,13 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  Registry registry = Registry();
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
   //estado del campo de texto
-  String email = '';
-  String password = '';
   String error = '';
 
   @override
@@ -63,7 +63,7 @@ class _LogInState extends State<LogIn> {
                 decoration: textInputDecoration.copyWith(hintText: 'Correo electrónico'),
                 validator: (val) => val!.isEmpty ? 'Inserte un correo electrónico' : null,
                 onChanged: (val){
-                  setState(() => email = val);
+                  setState(() => registry.email = val);
                 }
               ),
               const SizedBox(height: 20.0),
@@ -72,7 +72,7 @@ class _LogInState extends State<LogIn> {
                 validator: (val) => val!.length < 6 ? 'Debe contener 6 o más carácteres' : null,
                 obscureText: true,
                 onChanged: (val){
-                  setState(() => password = val);
+                  setState(() => registry.password = val);
                 }
               ),
               const SizedBox(height: 20.0),
@@ -83,9 +83,10 @@ class _LogInState extends State<LogIn> {
                   style: TextStyle(color: colorBlanco),
                   ),
                 onPressed: () async {
+                  registry.rol = 'Default';
                   if (_formKey.currentState!.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.logInWithEmailAndPassword(email, password);
+                    dynamic result = await _auth.logInWithEmailAndPassword(registry);
                     if(result == null){
                       setState(() => loading = false);
                       setState(() => error = 'No se pudo acceder con esas credenciales');

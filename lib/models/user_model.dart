@@ -1,16 +1,22 @@
 class UserModel {
   
-  final String? uid;
+  String? uid;
   int? edad;
   String? nombre;
-  String? apellido_paterno;
-  String? apellido_materno;
-  String? descripcion; //ROL
-  String? cve_casa;
+  String? apellidoPaterno;
+  String? apellidoMaterno;
+  String? rol; //ROL
+  String? casa;
   String? correo;
 
 
-  UserModel({this.uid});
+  UserModel();
+
+  @override
+  String toString() {
+  return 'UserModel(uid: $uid, edad: $edad, nombre: $nombre, apellidoPaterno: $apellidoPaterno, apellidoMaterno: $apellidoMaterno, rol: $rol, casa: $casa, correo: $correo)';
+}
+
   
 }
 

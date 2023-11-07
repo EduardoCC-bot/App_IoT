@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:proyectoiot/images_icons/choosing.dart';
 import 'package:proyectoiot/models/registry.dart';
+import 'package:proyectoiot/screens/authenticate/register_screens/data_house_register.dart';
 import 'package:proyectoiot/screens/authenticate/register_screens/join_house.dart';
 import 'package:proyectoiot/shared/constants.dart';
 
@@ -43,10 +45,13 @@ class _JoinOrCreateState extends State<JoinOrCreate> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(height: 30),
+            choosingIcon,
+            const SizedBox(height: 15),
             buildButton('Únete a una casa', () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => JoinHouse(registry: widget.registry),
@@ -54,7 +59,9 @@ class _JoinOrCreateState extends State<JoinOrCreate> {
             }),
             const SizedBox(height: 50),
             buildButton('Crea una casa', () {
-              // Aquí va la acción para "Crear casa"
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => HouseRegistry(registry: widget.registry),
+              ));
             }),
           ],
         ),

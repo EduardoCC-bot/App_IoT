@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/screens/authenticate/register_screens/register.dart';
+import 'package:proyectoiot/screens/authenticate/register_screens/user_register.dart';
 import 'package:proyectoiot/screens/authenticate/login.dart';
 
 //------------------------------------------------------------

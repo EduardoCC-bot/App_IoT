@@ -151,14 +151,27 @@ Future<void> getLada() async {
   }
 }*/
 
-Future<void> getLada() async {
-  var url = Uri.parse('http://189.131.88.67/api/v1/sql?db=SQL&crud&SELECT&data=lada:*');
+Future<List<String>> getLada() async {
+  var url = Uri.parse('http://onlyalecserver.ddns.net/api/v1/sql?db=SQL&crud&SELECT&data=lada:*');
+  List<String> ladaList = [];
+
   try {
     final response = await http.get(url, headers: {"Content-Type": "application/json"});
-    print("${response.body}");
-    print("${response.statusCode}");
+    
+    if (response.statusCode == 200) {
+      print(response);
+      // Si la respuesta es un JSON que contiene directamente una lista de strings:
+      ladaList = List<String>.from(json.decode(response.body));
+      
+      // Si la respuesta es un JSON con una clave que contiene la lista, por ejemplo {"result": ["123", "456"]}, usa:
+      // ladaList = List<String>.from(json.decode(response.body)['result']);
+
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
   } catch (e) {
-    // ignore: avoid_print
-    print(e.toString());
+    print('An error occurred: $e');
   }
+  
+  return ladaList;
 }
