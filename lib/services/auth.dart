@@ -8,7 +8,7 @@ import 'package:proyectoiot/models/user_model.dart';
 
 class AuthService{
 
-  //Singleton pqra solo tener una instancia
+  //Singleton para solo tener una instancia
   static final AuthService _instance = AuthService._internal();
 
   factory AuthService() {
