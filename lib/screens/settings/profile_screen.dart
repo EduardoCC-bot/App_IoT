@@ -1,6 +1,8 @@
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/user_icon.dart';
+import 'package:provider/provider.dart';
+import '/models/user_model.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
@@ -11,7 +13,10 @@ String apellidoP = 'Apellido Paterno';
 String url = 'http://onlyalecserver.ddns.net';
 String apellidoM = 'Apellido Materno';
 int edad = 20;
+bool cambio = false;
 Map info = {};  
+
+
 
 void getResp() async{
     Response response = await get(Uri.parse(url));
@@ -19,11 +24,21 @@ void getResp() async{
     print(data);
 }
 
-class ProfileScreen extends StatelessWidget {
+
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+
+  @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil'),
@@ -55,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
               Text('Apellido Paterno:'),
                 TextField(
                   controller: TextEditingController(text: apellidoP),
-                  enabled: false,
+                  enabled: cambio,
                 ),
 
                 SizedBox(height: 16.0),
@@ -63,42 +78,44 @@ class ProfileScreen extends StatelessWidget {
                 Text('Apellido Materno:'),
                 TextField(
                   controller: TextEditingController(text: apellidoM),
-                  enabled: false,
+                  enabled: cambio,
                 ),
                 SizedBox(height: 16.0),
 
                 Text('Edad:'),
                 TextField(
                   controller: TextEditingController(text: edad.toString()),
-                  enabled: false,
+                  enabled: cambio,
                 ),
                 SizedBox(height: 16.0),
 
                 Text('Correo:'),
                 TextField(
                   controller: TextEditingController(text: 'correo'),
-                  enabled: false,
+                  enabled: cambio,
                 ),
                 Text('Rol:'),
                 TextField(
                   controller: TextEditingController(text: 'rol'),
-                  enabled: false,
+                  enabled: cambio,
                 ),
                 Text('Nombre de la Casa:'),
                 TextField(
                   controller: TextEditingController(text: 'nombreCasa'),
-                  enabled: false,
+                  enabled: cambio,
                 ),
                 SizedBox(height: 16.0),
 
                 ElevatedButton(onPressed: () async {
                   //Corregir el como recibe los datos 
                   //info = getResp();
-                }, 
+                  cambio = true;
+                  
+                },
                     child: const ListTile(
-                      leading: Icon(Icons.person_2, color: color_11),
+                      leading: Icon(Icons.edit_square, color: color_11),
                       title: Text(
-                      'Peticion',
+                      'Cambiar Datos',
                       ),
                     )
                   ),

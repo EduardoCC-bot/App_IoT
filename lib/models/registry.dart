@@ -11,3 +11,4 @@ class Registry {
 
   Registry(this.email, this.password, this.name, this.apm, this.app, this.age, this.lada, this.telephone);
 }
+
