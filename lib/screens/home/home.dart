@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyectoiot/screens/home/settings_screen.dart';
 import 'package:proyectoiot/shared/functions.dart';
+import '../../models/user_model.dart';
 import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';
 import 'principal_screen.dart';
@@ -47,9 +49,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserModel?>(context);
+    print(user);
+
     return DefaultTabController(
-          length: 6,
-      child: Scaffold(
+        length: 6,
+        child: Scaffold(
         backgroundColor: colorBlanco,
         drawer:  AppDrawer(onDrawerItemTapped: onDrawerItemTapped),
         appBar: AppBar(

@@ -3,15 +3,15 @@ import 'package:proyectoiot/shared/constants.dart';
 
 typedef OnDropdownChanged = void Function(String?);
 
-InputDecorator dropDownOptions(OnDropdownChanged onSelected, List<String> options, String currentValue, String label){
-    return InputDecorator(
+Widget dropDownOptions(OnDropdownChanged onSelected,List<String> options,String? currentValue,String label) {
+  return InputDecorator(
     decoration: InputDecoration(
       labelText: label,
       enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: color_1), // Color del borde cuando el campo está habilitado
+        borderSide: BorderSide(color: color_1),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5), //relleno dentro del borde
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+    ),
     child: DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: currentValue,
@@ -21,10 +21,10 @@ InputDecorator dropDownOptions(OnDropdownChanged onSelected, List<String> option
         items: options.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Center( // Envuelve el Text en un widget Center
+            child: Center(
               child: Text(
                 value,
-                textAlign: TextAlign.center, // Centra el texto horizontalmente
+                textAlign: TextAlign.center,
               ),
             ),
           );

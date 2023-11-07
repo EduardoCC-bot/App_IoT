@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyectoiot/images_icons/join_house.dart';
-import 'package:proyectoiot/images_icons/login_icon.dart';
+import 'package:proyectoiot/images_icons/join_icon.dart';
 import '../../../models/registry.dart';
 import '../../../services/auth.dart';
 import '../../../shared/constants.dart';
@@ -22,8 +21,6 @@ class _JoinHouseState extends State<JoinHouse> {
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
 
-  String houseName = '';
-  String housePassword = '';
   String error = '';
   bool loading = false;
 
@@ -34,7 +31,7 @@ class _JoinHouseState extends State<JoinHouse> {
       appBar: AppBar(
         backgroundColor: color_1,
         elevation: 5.0,
-        title: const Text('Únete'),
+        title: const Text('Únete a una casa'),
         centerTitle: true,
       ),
       body: Container(
@@ -52,7 +49,7 @@ class _JoinHouseState extends State<JoinHouse> {
                   children:[
                     Flexible(
                       flex: 4,
-                      child: formBox('Nombre de la casa', 'Complete el campo', context,(val) => setState(() => houseName = val)),
+                      child: formBox('Nombre de la casa', 'Complete el campo', context,(val) => setState(() => widget.registry.houseDescription = val)),
                     ),
                   ]
                 ),
@@ -68,7 +65,7 @@ class _JoinHouseState extends State<JoinHouse> {
                       validator: (val) => val!.isEmpty ? 'Llene el campo' : null,
                       obscureText: true,
                       onChanged: (val){
-                        setState(() => housePassword = val);
+                        setState(() => widget.registry.housePassword = val);
                        }
                       )
                       ),
@@ -85,8 +82,12 @@ class _JoinHouseState extends State<JoinHouse> {
                    onPressed: () async {
                     if (_formKey.currentState!.validate()){
                       setState(() => loading = true);
-                      dynamic result = await _auth.registerWithEmailAndPassword(widget.registry.email, widget.registry.password);
-                      if(result != null){
+                      dynamic result = await _auth.registerWithEmailAndPassword(widget.registry);
+                      if(result == null){
+                        // ignore: use_build_context_synchronously
+                        setState(() => loading = false);
+                        setState(() => error = 'No se pudo registrar con este correo electrónico');
+                      }else{
                         // ignore: use_build_context_synchronously
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       }

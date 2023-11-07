@@ -26,7 +26,7 @@ class _RegisterState extends State<Register> {
   List<String> list = <String>['One', 'Two', 'Three', 'Four']; 
 
   //estado de campo de texto
-  Registry registry = Registry('', '', '', '', '', 0, '', 0);
+  Registry registry = Registry();
   bool loading = false;
   String error = '';
 
@@ -81,15 +81,9 @@ class _RegisterState extends State<Register> {
                         decoration: textInputDecoration.copyWith(hintText: 'Edad'),
                         keyboardType: TextInputType.number,
                         validator: (val){
-                            if (val!.isEmpty) {
-                              return 'Complete el campo';
-                            }
-                            if (!isNumeric(val)) {
-                              return 'Solo números';
-                            }
-                            if (int.parse(val) >90 || int.parse(val) < 8 ) {
-                              return 'No es una edad válida';
-                            }
+                            if (val!.isEmpty) {return 'Complete el campo';}
+                            if (!isNumeric(val)) {return 'Solo números';}
+                            if (int.parse(val) >90 || int.parse(val) < 8 ) {return 'No es una edad válida';}
                             return null; // Devuelve null si no hay errores de validación
                         },
                         onChanged: (val) {
@@ -137,15 +131,9 @@ class _RegisterState extends State<Register> {
                         decoration: textInputDecoration.copyWith(hintText: 'Teléfono'),
                         keyboardType: TextInputType.number,
                         validator: (val){
-                            if (val!.isEmpty) {
-                              return 'Complete el campo';
-                            }
-                            if (!isNumeric(val)) {
-                              return 'Solo números';
-                            }
-                            if(val.toString().length>8 || val.toString().length<7){
-                               return 'Longitud incorrecta';
-                            }
+                            if (val!.isEmpty) {return 'Complete el campo';}
+                            if (!isNumeric(val)) {return 'Solo números';}
+                            if(val.toString().length>8 || val.toString().length<7){return 'Longitud incorrecta';}
                             return null; // Devuelve null si no hay errores de validación
                         },
                         onChanged: (val) {
@@ -171,12 +159,8 @@ class _RegisterState extends State<Register> {
                         child: TextFormField(
                         decoration: textInputDecoration.copyWith(hintText: 'Correo Electrónico'),
                         validator: (val){
-                            if (val!.isEmpty) {
-                              return 'Complete el campo';
-                            }
-                            if (!isValidEmail(val)) {
-                              return 'Email no válido';
-                            }
+                            if (val!.isEmpty) {return 'Complete el campo';}
+                            if (!isValidEmail(val)) {return 'Email no válido';}
                             return null; // Devuelve null si no hay errores de validación
                         },
                         onChanged:(val) {
