@@ -8,19 +8,16 @@ import 'dart:convert';
 
 
 //valores que obtendremos al hacer la conexion con la base de datos
-String nombre = 'Nombre';
-String apellidoP = 'Apellido Paterno';
-String url = 'http://onlyalecserver.ddns.net';
-String apellidoM = 'Apellido Materno';
-int edad = 20;
-bool cambio = false;
-Map info = {};  
 
+String url = 'http://apihomeiot.online/v1.0/db';
 
 
 void getResp() async{
+    //http://apihomeiot.online/v1.0/db
+    url = '$url/db=SQL&crud=SELECT&data="SELECT * FROM LADA"';
     Response response = await get(Uri.parse(url));
     Map data =  jsonDecode(response.body);
+    // ignore: avoid_print
     print(data);
 }
 
@@ -34,7 +31,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
+  bool cambio = false;
+  Map info = {};  
+  
+  @override
+  void initState() {
+    cambio = false;
+    super.initState();
+    //getResp();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,70 +63,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: userIcon,
               ),
               
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               
-              Text(nombre),
+              const Text('Nombre'),
               TextField(
-              controller: TextEditingController(text: nombre),
-              enabled: false,
+              controller: TextEditingController(text: user!.nombre),
+              enabled: cambio,
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
 
-              Text('Apellido Paterno:'),
+              const Text('Apellido Paterno:'),
                 TextField(
-                  controller: TextEditingController(text: apellidoP),
+                  controller: TextEditingController(text: user.apellidoPaterno),
                   enabled: cambio,
                 ),
 
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
-                Text('Apellido Materno:'),
+                const Text('Apellido Materno:'),
                 TextField(
-                  controller: TextEditingController(text: apellidoM),
+                  controller: TextEditingController(text: user.apellidoMaterno),
                   enabled: cambio,
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
-                Text('Edad:'),
+                const Text('Edad:'),
                 TextField(
-                  controller: TextEditingController(text: edad.toString()),
+                  controller: TextEditingController(text: user.edad.toString()),
                   enabled: cambio,
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
-                Text('Correo:'),
+                const Text('Correo:'),
                 TextField(
-                  controller: TextEditingController(text: 'correo'),
+                  controller: TextEditingController(text: user.correo),
                   enabled: cambio,
                 ),
-                Text('Rol:'),
+                const Text('Rol:'),
                 TextField(
-                  controller: TextEditingController(text: 'rol'),
+                  controller: TextEditingController(text: user.rol),
                   enabled: cambio,
                 ),
-                Text('Nombre de la Casa:'),
+                const Text('Nombre de la Casa:'),
                 TextField(
-                  controller: TextEditingController(text: 'nombreCasa'),
+                  controller: TextEditingController(text: user.casa),
                   enabled: cambio,
                 ),
-                SizedBox(height: 16.0),
-
-                ElevatedButton(onPressed: () async {
-                  //Corregir el como recibe los datos 
-                  //info = getResp();
-                  cambio = true;
-                  
-                },
-                    child: const ListTile(
-                      leading: Icon(Icons.edit_square, color: color_11),
-                      title: Text(
+                const SizedBox(height: 16.0),
+                        
+                   ListTile(
+                      leading: const Icon(Icons.edit_square, color: color_11),
+                      title: const Text(
                       'Cambiar Datos',
                       ),
+                      onTap: () {setState(() { cambio = !cambio; });},
                     )
-                  ),
-              ],
+                  ],
           ),
         ),
     );
+
   }
 }

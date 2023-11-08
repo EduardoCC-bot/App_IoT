@@ -135,6 +135,7 @@ class _HouseRegistryState extends State<HouseRegistry> {
                               try {
                                 widget.registry.extNum = val;
                               } catch (e) {
+                                // ignore: avoid_print
                                 print('Ingresa solo números');
                           }
                           });
