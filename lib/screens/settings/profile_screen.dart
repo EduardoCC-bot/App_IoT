@@ -3,23 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/user_icon.dart';
 import 'package:provider/provider.dart';
 import '/models/user_model.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
 //valores que obtendremos al hacer la conexion con la base de datos
 
-String url = 'http://apihomeiot.online/v1.0/db';
 
 
-void getResp() async{
-    //http://apihomeiot.online/v1.0/db
-    url = '$url/db=SQL&crud=SELECT&data="SELECT * FROM LADA"';
-    Response response = await get(Uri.parse(url));
-    Map data =  jsonDecode(response.body);
-    // ignore: avoid_print
-    print(data);
+Future<List<int>> getLada() async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/db?db=SQL&crud=SELECT&data=SELECT%20*%20FROM%20Lada");
+  List<int> ladaList = [];
+  try {
+    //final response = await http.get(url);
+      final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      if (jsonResponse['OK'] != null) {
+        /*for (var ladaPair in jsonResponse['OK']) {
+          if (ladaPair is List && ladaPair.isNotEmpty) {
+            ladaList.add(ladaPair[0] as int);
+          }
+        }*/
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+  //print(ladaList);
+  return ladaList;
 }
+
+
 
 
 class ProfileScreen extends StatefulWidget {
@@ -31,6 +49,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late Future<List<int>> ladas; 
   bool cambio = false;
   Map info = {};  
   
@@ -40,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     //getResp();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +83,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: userIcon,
               ),
               
+                
+
+
+
               const SizedBox(height: 16.0),
               
               const Text('Nombre'),
@@ -116,7 +140,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: const Text(
                       'Cambiar Datos',
                       ),
-                      onTap: () {setState(() { cambio = !cambio; });},
+                      onTap: () {setState(() { 
+                        cambio = !cambio; 
+                        final Future<List<int>> lista = getLada(); 
+                        
+                        
+                        });},
                     )
                   ],
           ),
