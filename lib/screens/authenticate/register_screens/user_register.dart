@@ -4,7 +4,7 @@ import 'package:proyectoiot/screens/authenticate/register_screens/join_or_create
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/register_icon.dart';
 import 'package:proyectoiot/shared/functions.dart';
-import 'package:proyectoiot/special_widgets/dropdown_button.dart';
+import 'package:proyectoiot/special_widgets/future_dropdown_builder.dart';
 
 //------------------------------------------------------------
 //Pantalla para registrarse en la aplicación/Firebase
@@ -23,7 +23,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
-  List<String> list = <String>['One', 'Two', 'Three', 'Four']; 
+  late Future<List<int>> ladasFuture;
 
   //estado de campo de texto
   Registry registry = Registry();
@@ -33,12 +33,18 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
     super.initState();
-    registry.lada = list.first; // Ahora puedes acceder a 'list' porque estamos en un método y no en el inicializador
+    ladasFuture = getLada();
+    ladasFuture.then((List<int> ladasList){
+      if(ladasList.isNotEmpty){
+        setState(() {
+          registry.lada = ladasList.first.toString();
+        });
+      }
+    }); // Ahora puedes acceder a 'list' porque estamos en un método y no en el inicializador
   }
 
   @override
   Widget build(BuildContext context) {
-    //getLada();
     return Scaffold(
       backgroundColor: colorBlanco,
       appBar: AppBar(
@@ -90,8 +96,8 @@ class _RegisterState extends State<Register> {
                           setState(() {
                             try {
                               registry.age = int.parse(val);
+                            // ignore: empty_catches
                             } catch (e) {
-                              print('Ingresa solo números');
                             }
                           });
                         },
@@ -122,7 +128,18 @@ class _RegisterState extends State<Register> {
                   children: [
                     Flexible(
                       flex: 2,
-                      child: dropDownOptions((String? value) => setState(() => registry.lada = value!), list, registry.lada, 'Lada')
+                      child: FutureDropdownBuilder<int>(
+                        future: ladasFuture, 
+                        valueFormatter: (int value)=> value.toString(), 
+                        onSelected: (int? value){
+                             setState(() {
+                               registry.lada = value.toString();
+                               print(registry.lada);
+                          });
+                        }, 
+                        initialValue:  registry.lada != null ? int.parse(registry.lada!) : null,
+                        label: "Lada"
+                      )
                     ),
                     const SizedBox(width: 6),
                     Flexible(
@@ -140,8 +157,8 @@ class _RegisterState extends State<Register> {
                           setState(() {
                             try {
                               registry.telephone = int.parse(val);
+                            // ignore: empty_catches
                             } catch (e) {
-                              print('Ingresa solo números');
                             }
                           });
                         },

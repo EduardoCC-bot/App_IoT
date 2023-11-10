@@ -23,7 +23,7 @@ Widget dropDownOptions(OnDropdownChanged onSelected,List<String> options,String?
             value: value,
             child: Center(
               child: Text(
-                value,
+                "+$value",
                 textAlign: TextAlign.center,
               ),
             ),
@@ -33,4 +33,3 @@ Widget dropDownOptions(OnDropdownChanged onSelected,List<String> options,String?
     ),
   );
 }
-

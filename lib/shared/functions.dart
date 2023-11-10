@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../models/registry.dart';
 import 'constants.dart';
 
 //----------------------------------------------------------------------
@@ -130,48 +133,45 @@ TextFormField formBox (String hintText, String error, BuildContext context, OnCh
   );
 }
 
-/*
-Future<void> getLada() async {
-  var url = Uri.parse('http://189.131.88.67/api/v1/sql');
-  Map data = {
-    'db':'SQL',
-    'crud': 'SELECT',
-    'data': {
-      "Lada": '*'
-    }
-  };
-  var body = json.encode(data);
-  try {
-    final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.body}");
-    print("${response.statusCode}");
-  } catch (e) {
-    // ignore: avoid_print
-    print(e.toString());
-  }
-}*/
 
-Future<List<String>> getLada() async {
-  var url = Uri.parse('http://onlyalecserver.ddns.net/api/v1/sql?db=SQL&crud&SELECT&data=lada:*');
-  List<String> ladaList = [];
-
+Future<List<int>> getLada() async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/db?db=SQL&crud=SELECT&data=SELECT%20*%20FROM%20Lada");
+  List<int> ladaList = [];
   try {
-    final response = await http.get(url, headers: {"Content-Type": "application/json"});
+    final response = await http.get(url);
     
     if (response.statusCode == 200) {
-      print(response);
-      // Si la respuesta es un JSON que contiene directamente una lista de strings:
-      ladaList = List<String>.from(json.decode(response.body));
-      
-      // Si la respuesta es un JSON con una clave que contiene la lista, por ejemplo {"result": ["123", "456"]}, usa:
-      // ladaList = List<String>.from(json.decode(response.body)['result']);
-
+      var jsonResponse = json.decode(response.body);
+      if (jsonResponse['OK'] != null) {
+        for (var ladaPair in jsonResponse['OK']) {
+          if (ladaPair is List && ladaPair.isNotEmpty) {
+            ladaList.add(ladaPair[0] as int);
+          }
+        }
+      }
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
   } catch (e) {
     print('An error occurred: $e');
   }
-  
+  print(ladaList);
   return ladaList;
+}
+
+Future<void> insertAllSql(Registry registry) async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/db");
+  Map <String, dynamic> registryMap = registry.toJson();
+  String body = jsonEncode(registryMap);
+  try {
+  final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
+  
+  if (response.statusCode == 200) {
+    print(response);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
 }

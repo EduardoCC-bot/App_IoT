@@ -118,6 +118,7 @@ class _CreateHouseState extends State<CreateHouse> {
                         setState(() => error = 'No se pudo registrar con este correo electrónico');
                       }else{
                         // ignore: use_build_context_synchronously
+                        print(widget.registry);
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       }
                     }

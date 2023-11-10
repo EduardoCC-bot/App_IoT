@@ -49,5 +49,67 @@ class Registry {
       'cp: $cp'
     '}';
   }
+
+  Map<String,dynamic> toJson(){
+    return {
+      "db": "SQL",
+      "crud": "INSERT",
+      "data": {
+        "Persona": {
+            "edad": age,
+            "correo": email,
+            "cve_nombre": null,
+            "cve_rol": null,
+            "cve_casa": null
+        },
+        "Telefono":{
+            "num_telefonico": telephone,
+            "cve_lada": null,
+            "cve_persona": null,
+        },
+        "Lada": {
+          "codigo": int.parse(lada!),
+        },
+        "Nombre": {
+            "nombre": name,
+            "apellido_paterno": app,
+            "apellido_materno": apm,
+        },
+        "Casa": {
+            "tamanio": null,
+            "descripcion": houseDescription,
+            "num_espacios": null,
+            "contrasenia": housePassword,
+            "cve_direccion": null,
+            "cve_tipopropiedad": null,
+            "cve_red": null
+        },
+        "Direccion": {
+            "Calle": street,
+            "num_exterior": int.parse(extNum!),
+            "num_interior": int.parse(intNum!),
+            "cve_cp": null
+        },
+        "CP": {
+            "descripcion": int.parse(cp!),
+            "cve_colonia": null
+        },
+        "Colonia": {
+            "descripcion": colony,
+            "cve_municipio": null
+        },
+        "municipio": {
+            "descripcion": municipality,
+            "cve_estado": 10
+        },
+        "Red": {
+            "ip": "200.10.0.10",
+            "mascara": "255.255.255.0",
+            "nombre_red": "HomeIoT",
+            "contrasenia_red": "Home@IoT"
+        }
+      }
+    };
+  }
 }
 
