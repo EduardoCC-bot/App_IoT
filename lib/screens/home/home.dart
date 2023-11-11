@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyectoiot/screens/home/settings_screen.dart';
-import 'package:proyectoiot/shared/functions.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
 import '../../models/user_model.dart';
 import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';

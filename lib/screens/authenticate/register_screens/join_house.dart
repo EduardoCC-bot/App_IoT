@@ -3,7 +3,7 @@ import 'package:proyectoiot/images_icons/join_icon.dart';
 import '../../../models/registry.dart';
 import '../../../services/auth.dart';
 import '../../../shared/constants.dart';
-import '../../../shared/functions.dart';
+import '../../../shared/widget_functions.dart';
 import '../../loading.dart';
 
 

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/screens/authenticate/register_screens/create_house.dart';
 import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/shared/functions.dart';
-import 'package:proyectoiot/special_widgets/dropdown_button.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
+
+import '../../loading.dart';
 
 //------------------------------------------------------------
 //Pantalla para registrar los datos de la Casa
@@ -22,10 +23,7 @@ class HouseRegistry extends StatefulWidget {
 class _HouseRegistryState extends State<HouseRegistry> {
 
   final _formKey = GlobalKey<FormState>();
-
-  List<String> states = ['Estado 1', 'Estado 2', 'Estado 3', 'Estado 4'];
-  List<String> countries = ['País 1', 'País 2', 'País 3', 'País 4'];
-  String? selectedCountry, selectedState;
+  late Future<List<String>> countryStateFuture;
 
   bool loading = false;
   String error = '';
@@ -33,11 +31,23 @@ class _HouseRegistryState extends State<HouseRegistry> {
   @override
   void initState() {
     super.initState();
+    /*countryStateFuture = getCountryState(int.parse(widget.registry.lada!));
+    countryStateFuture.then((List<String> countryState){
+      if(countryState.isNotEmpty){
+        setState(() {
+          widget.registry.country = countryState[1];
+          widget.registry.state = countryState[0];
+          loading = false;
+        });
+      } else{
+        Navigator.of(context).pop();
+      }
+    });*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? const Loading() : Scaffold(
       backgroundColor: colorBlanco,
       appBar: AppBar(
         backgroundColor: color_1,
@@ -54,31 +64,32 @@ class _HouseRegistryState extends State<HouseRegistry> {
               children: <Widget>[
                 const SizedBox(height: 20.0),
 //-------------------------------------------------------------------------------------------------------------------                
-                Row(
+                const Row(
                   mainAxisAlignment:MainAxisAlignment.spaceEvenly,
                   children:[
                     Flexible(
                       flex: 3,
-                      child: dropDownOptions(
-                        (String? newValue) {
-                        setState(() {
-                          widget.registry.country = newValue!;
-                          selectedCountry = newValue;
-                        });
-                      }, countries, selectedCountry ?? countries.first, 'País')
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: "País",
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: color_1)),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 1, vertical: 5),
+                        ),
+                        child: Text('País'/*widget.registry.country!*/, textAlign: TextAlign.center)
+                      )
                     ),
                     const SizedBox(width: 7),
                     Flexible(
                       flex: 5,
-                      child: dropDownOptions(
-                        (String? newValue) {
-                        setState(() {
-                          widget.registry.state = newValue!;
-                          selectedState = newValue;
-                        });
-                      }, states, selectedState ?? states.first, 'Estado')
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: "Estado",
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: color_1)),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 1, vertical: 5),
+                        ),
+                        child: Text('Estado'/*widget.registry.state!*/, textAlign: TextAlign.center)
+                      )
                     ),
-
                   ]
                 ),
 //-------------------------------------------------------------------------------------------------------------------                

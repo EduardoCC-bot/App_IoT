@@ -3,8 +3,9 @@ import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/screens/authenticate/register_screens/join_or_create.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/register_icon.dart';
-import 'package:proyectoiot/shared/functions.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
 import 'package:proyectoiot/special_widgets/future_dropdown_builder.dart';
+import '../../../shared/sql_functions.dart';
 
 //------------------------------------------------------------
 //Pantalla para registrarse en la aplicación/Firebase
@@ -40,7 +41,7 @@ class _RegisterState extends State<Register> {
           registry.lada = ladasList.first.toString();
         });
       }
-    }); // Ahora puedes acceder a 'list' porque estamos en un método y no en el inicializador
+    });
   }
 
   @override
@@ -127,14 +128,13 @@ class _RegisterState extends State<Register> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Flexible(
-                      flex: 2,
+                      flex: 3,
                       child: FutureDropdownBuilder<int>(
                         future: ladasFuture, 
                         valueFormatter: (int value)=> value.toString(), 
                         onSelected: (int? value){
                              setState(() {
                                registry.lada = value.toString();
-                               print(registry.lada);
                           });
                         }, 
                         initialValue:  registry.lada != null ? int.parse(registry.lada!) : null,
@@ -143,7 +143,7 @@ class _RegisterState extends State<Register> {
                     ),
                     const SizedBox(width: 6),
                     Flexible(
-                        flex: 5,
+                        flex: 4,
                         child: TextFormField(
                         decoration: textInputDecoration.copyWith(hintText: 'Teléfono'),
                         keyboardType: TextInputType.number,

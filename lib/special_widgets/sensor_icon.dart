@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../shared/constants.dart';
-import '../shared/functions.dart';
+import '../shared/widget_functions.dart';
 
 //----------------------------------------------------------------------
 //Widget individual por cada sensor. Contiene un icono y su valor en tiempo real

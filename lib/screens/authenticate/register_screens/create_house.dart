@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/join_icon.dart';
 import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/shared/functions.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
 import 'package:proyectoiot/special_widgets/dropdown_button.dart';
 
 import '../../../services/auth.dart';

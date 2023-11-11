@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/shared/functions.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
 
 //------------------------------------------------------------
 //Pantalla y lógica para las notificaciones
