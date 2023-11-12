@@ -4,8 +4,9 @@ import 'package:proyectoiot/screens/authenticate/register_screens/join_or_create
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/register_icon.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
-import 'package:proyectoiot/special_widgets/future_dropdown_builder.dart';
 import '../../../shared/sql_functions.dart';
+import '../../../special_widgets/dropdown_button.dart';
+import '../../loading.dart';
 
 //------------------------------------------------------------
 //Pantalla para registrarse en la aplicación/Firebase
@@ -24,29 +25,34 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
-  late Future<List<int>> ladasFuture;
+  late Map<int,int> ladasMap;
+  List<String>? ladasKeys =[];
 
   //estado de campo de texto
   Registry registry = Registry();
-  bool loading = false;
+  bool loading = true;
   String error = '';
 
   @override
   void initState() {
     super.initState();
-    ladasFuture = getLada();
-    ladasFuture.then((List<int> ladasList){
-      if(ladasList.isNotEmpty){
-        setState(() {
-          registry.lada = ladasList.first.toString();
-        });
-      }
-    });
+    initLadasMap();
+  }
+
+   void initLadasMap() async {
+    ladasMap = await getLada();
+    setState(() {
+    ladasKeys = ladasMap.keys.map((key) => key.toString()).toList();
+    if(ladasKeys!.isNotEmpty) {
+      registry.lada = ladasKeys!.first;
+      loading = false;
+    }
+  });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? const Loading() : Scaffold(
       backgroundColor: colorBlanco,
       appBar: AppBar(
         backgroundColor: color_1,
@@ -55,10 +61,7 @@ class _RegisterState extends State<Register> {
         actions: <Widget>[
           TextButton.icon(
             icon: const Icon(Icons.person, color: colorBlanco),
-            label : const Text(
-              'Acceder',
-              style: TextStyle(color: colorBlanco)
-            ),
+            label : const Text('Acceder',style: TextStyle(color: colorBlanco)),
             onPressed: () {
               widget.toggleView!();
             },
@@ -129,16 +132,16 @@ class _RegisterState extends State<Register> {
                   children: [
                     Flexible(
                       flex: 3,
-                      child: FutureDropdownBuilder<int>(
-                        future: ladasFuture, 
-                        valueFormatter: (int value)=> value.toString(), 
-                        onSelected: (int? value){
-                             setState(() {
-                               registry.lada = value.toString();
+                      child: dropDownOptions(
+                        (newValue) {
+                          setState(() {
+                            registry.lada = newValue; // Actualizar el valor seleccionado
+                            registry.pkLada = (ladasKeys!.isNotEmpty && newValue != null ? ladasMap[int.parse(newValue)] : null); // Actualizar el valor asociado del mapa
                           });
-                        }, 
-                        initialValue:  registry.lada != null ? int.parse(registry.lada!) : null,
-                        label: "Lada"
+                        },
+                        ladasKeys!,
+                        registry.lada,
+                        "Select Lada" // Etiqueta para el dropdown
                       )
                     ),
                     const SizedBox(width: 6),

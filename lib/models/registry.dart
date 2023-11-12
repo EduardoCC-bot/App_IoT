@@ -2,14 +2,16 @@ class Registry {
   
   String? email;
   String? password;
-  String? rol;
+  int? pkRol;
   String? name;
   String? apm;
   String? app;
   int? age;
   String? lada;   //cast to int
   int? telephone;
+  int? pkLada;
 
+  int? pkHouse;
   String? houseDescription;
   String? houseType;
   String? housePassword;
@@ -30,12 +32,15 @@ class Registry {
     return 'UserInformation{'
       'email: $email, '
       'password: $password, '
+      'rol: $pkRol, '
       'name: $name, '
       'apm: $apm, '
       'app: $app, '
       'age: $age, '
       'lada: $lada, '
+      'cve_lada: $pkLada, '
       'telephone: $telephone, '
+      'cve_house: $pkHouse, '
       'houseDescription: $houseDescription, '
       'houseType: $houseType, '
       'housePassword: $housePassword, '
@@ -50,9 +55,8 @@ class Registry {
     '}';
   }
 
-  Map<String,dynamic> toJson(){
+  Map<String,dynamic> allDatatoJson(){
     return {
-      "db": "SQL",
       "crud": "INSERT",
       "data": {
         "Persona": {
@@ -108,6 +112,31 @@ class Registry {
             "nombre_red": "HomeIoT",
             "contrasenia_red": "Home@IoT"
         }
+      }
+    };
+  }
+
+  Map<String,dynamic> userDatatoJson(){
+    return {
+      "crud": "INSERT",
+      "data": {
+        "Persona": {
+            "edad": age,
+            "correo": email,
+            "cve_nombre": null,
+            "cve_tiporol": pkRol,
+            "cve_casa": pkHouse
+        },
+        "Telefono":{
+            "num_telefonico": telephone,
+            "cve_lada": pkLada,
+            "cve_persona": null,
+        },
+        "Nombre": {
+            "nombre": name,
+            "apellido_paterno": app,
+            "apellido_materno": apm,
+        },
       }
     };
   }

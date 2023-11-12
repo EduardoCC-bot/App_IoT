@@ -38,7 +38,7 @@ class AuthService{
       userModel.correo = tempRegistry?.email;
       userModel.edad = tempRegistry?.age;
       userModel.nombre = tempRegistry?.name;
-      userModel.rol = tempRegistry?.rol;
+      userModel.cveTiporol = tempRegistry?.pkRol;
       tempRegistry = null;
       return userModel;
     }

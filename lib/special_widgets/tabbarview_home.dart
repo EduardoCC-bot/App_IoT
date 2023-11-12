@@ -15,7 +15,6 @@ class _TabBarViewHomeState extends State<TabBarViewHome> {
   @override
   Widget build(BuildContext context) {
     return const TabBarView(
-
       children: <Widget>[
         Center(child: Text('Contenido de Tab 1')),
         DevicesInASpace(space: "Entrada"),
@@ -27,3 +26,4 @@ class _TabBarViewHomeState extends State<TabBarViewHome> {
     );
   }
 }
+

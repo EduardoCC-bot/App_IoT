@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyectoiot/screens/home/settings_screen.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
+import 'package:proyectoiot/special_widgets/floating_button.dart';
 import '../../models/user_model.dart';
 import '../../shared/constants.dart';
 import '../../special_widgets/drawer_menu.dart';
-import 'principal_screen.dart';
+import 'mainly_screen.dart';
 import 'notification_screen.dart';
 //------------------------------------------------------------
 //HOME. Pantalla contenedora a la que se accede una vez autentificado
@@ -21,17 +22,21 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedDrawerItem = 0;
   String header='Inicio';
+  Widget? floatingButton;
 
   void onDrawerItemTapped(int itemIndex) {
   setState(() {
     selectedDrawerItem = itemIndex;
     header = getAppBarTitle(itemIndex);
+    floatingButton = (itemIndex == 0) ? AddAreaDevice(context: context) : null;
   });
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    super.initState();
+    selectedDrawerItem = 0;
+    floatingButton = AddAreaDevice(context: context);
   }
 
   Widget buildScreen() {
@@ -51,7 +56,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel?>(context);
     print(user);
-
     return DefaultTabController(
         length: 6,
         child: Scaffold(
@@ -60,13 +64,12 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           title: Text(header),
           centerTitle: true,
-          //leading: const Icon(Icons.home),
           backgroundColor: color_1,
           elevation: 5.0,
-        ), 
+        ),
+        floatingActionButton: floatingButton, 
         body: buildScreen(),
       ),      
     );
   }
-
 }

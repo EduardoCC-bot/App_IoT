@@ -83,7 +83,7 @@ class _LogInState extends State<LogIn> {
                   style: TextStyle(color: colorBlanco),
                   ),
                 onPressed: () async {
-                  registry.rol = 'Default';
+                  registry.pkRol = 2;
                   if (_formKey.currentState!.validate()){
                     setState(() => loading = true);
                     dynamic result = await _auth.logInWithEmailAndPassword(registry);

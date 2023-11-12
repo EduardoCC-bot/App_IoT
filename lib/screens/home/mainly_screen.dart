@@ -21,7 +21,7 @@ class PrincipalScreen extends StatelessWidget{
           const SensorDisplay(),
           const SizedBox(height: 30),
           const TabBarHome(),
-          const Expanded(child: TabBarViewHome())
+          const Expanded(child: TabBarViewHome()),
         ],
     );
   }

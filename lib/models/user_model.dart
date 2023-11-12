@@ -6,6 +6,7 @@ class UserModel {
   String? apellidoPaterno;
   String? apellidoMaterno;
   String? rol; //ROL
+  int? cveTiporol;
   String? casa;
   String? correo;
 

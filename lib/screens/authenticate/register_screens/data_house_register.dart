@@ -3,7 +3,7 @@ import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/screens/authenticate/register_screens/create_house.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
-
+import '../../../shared/sql_functions.dart';
 import '../../loading.dart';
 
 //------------------------------------------------------------
@@ -25,13 +25,13 @@ class _HouseRegistryState extends State<HouseRegistry> {
   final _formKey = GlobalKey<FormState>();
   late Future<List<String>> countryStateFuture;
 
-  bool loading = false;
+  bool loading = true;
   String error = '';
 
   @override
   void initState() {
     super.initState();
-    /*countryStateFuture = getCountryState(int.parse(widget.registry.lada!));
+    countryStateFuture = getCountryState(int.parse(widget.registry.lada!));
     countryStateFuture.then((List<String> countryState){
       if(countryState.isNotEmpty){
         setState(() {
@@ -42,7 +42,7 @@ class _HouseRegistryState extends State<HouseRegistry> {
       } else{
         Navigator.of(context).pop();
       }
-    });*/
+    });
   }
 
   @override
@@ -64,30 +64,30 @@ class _HouseRegistryState extends State<HouseRegistry> {
               children: <Widget>[
                 const SizedBox(height: 20.0),
 //-------------------------------------------------------------------------------------------------------------------                
-                const Row(
+                Row(
                   mainAxisAlignment:MainAxisAlignment.spaceEvenly,
                   children:[
                     Flexible(
                       flex: 3,
                       child: InputDecorator(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: "País",
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: color_1)),
                           contentPadding: EdgeInsets.symmetric(horizontal: 1, vertical: 5),
                         ),
-                        child: Text('País'/*widget.registry.country!*/, textAlign: TextAlign.center)
+                        child: Text(widget.registry.country!, textAlign: TextAlign.center)
                       )
                     ),
                     const SizedBox(width: 7),
                     Flexible(
                       flex: 5,
                       child: InputDecorator(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: "Estado",
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: color_1)),
                           contentPadding: EdgeInsets.symmetric(horizontal: 1, vertical: 5),
                         ),
-                        child: Text('Estado'/*widget.registry.state!*/, textAlign: TextAlign.center)
+                        child: Text(widget.registry.state!, textAlign: TextAlign.center)
                       )
                     ),
                   ]

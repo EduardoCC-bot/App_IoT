@@ -109,7 +109,7 @@ class _CreateHouseState extends State<CreateHouse> {
                   style: ElevatedButton.styleFrom(backgroundColor: color_11),
                   child: const Text('Continuar',style: TextStyle(color: colorBlanco),),
                   onPressed:  () async {
-                    widget.registry.rol = 'Propietario';
+                    widget.registry.pkRol = 1;
                     if (_formKey.currentState!.validate()){
                       setState(() => loading = true);
                       dynamic result = await _auth.registerWithEmailAndPassword(widget.registry);
