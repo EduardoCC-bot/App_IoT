@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/user_info.dart';
 import '../services/sensor_monitor.dart';
 import 'sensor_icon.dart';
 
@@ -17,11 +19,18 @@ class SensorDisplay extends StatefulWidget {
 }
 
 class SensorDisplayState extends State<SensorDisplay> {
-  final SensorMonitor monitor = SensorMonitor();
+  late final SensorMonitor monitor;
 
   @override
   void initState() {
     super.initState();
+    initMonitor();
+  }
+
+  void initMonitor() {
+    UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
+    monitor = SensorMonitor();
+    monitor.configureCasaPath(userInfo.casa!);
     monitor.initialize();
   }
 

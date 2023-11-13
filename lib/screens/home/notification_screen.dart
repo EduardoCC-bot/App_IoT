@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:provider/provider.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
+
+import '../../models/user_info.dart';
 
 //------------------------------------------------------------
 //Pantalla y lógica para las notificaciones
@@ -16,21 +19,30 @@ class NotificationScreen extends StatefulWidget{
 
 class _NotificationScreenState extends State<NotificationScreen> {
   
-  final DatabaseReference reference = FirebaseDatabase.instance.ref();
+  DatabaseReference? reference;
+
+  @override
+  void initState() {
+    super.initState();
+    UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
+    String casaPath = replaceSpaces(userInfo.casa!);
+    reference = FirebaseDatabase.instance.ref().child("$casaPath/Notificaciones");
+  }
+
 
   //función encargada de eliminar notificaciones de la base de datos
   void deleteNotification(String key) {
-  reference.child("Casa/Notificaciones").child(key).remove().then((_) {
-    print("Notificación eliminada exitosamente");
-  }).catchError((error) {
-    print("Error al eliminar la notificación: $error");
-  });
+    reference?.child(key).remove().then((_) {
+      print("Notificación eliminada exitosamente");
+    }).catchError((error) {
+      print("Error al eliminar la notificación: $error");
+    });
   }
 
   @override
   Widget build(BuildContext context){
     return StreamBuilder<DatabaseEvent>(
-      stream: reference.child("Casa/Notificaciones").onValue,
+      stream: reference?.onValue,
       builder: (context, snapshot){
         //validaciones de data obtenida
         if(snapshot.hasError){

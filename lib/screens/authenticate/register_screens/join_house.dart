@@ -28,7 +28,6 @@ class _JoinHouseState extends State<JoinHouse> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.registry);
     return loading ? const Loading() :Scaffold(
       backgroundColor: colorBlanco,
       appBar: AppBar(
@@ -120,7 +119,7 @@ class _JoinHouseState extends State<JoinHouse> {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       error,
-                      style: TextStyle(color: Colors.red, fontSize: 14),
+                      style: const TextStyle(color: Colors.red, fontSize: 14),
                     ),
                   ),
                 ]

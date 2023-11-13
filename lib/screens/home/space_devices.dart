@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:provider/provider.dart';
 import 'package:proyectoiot/shared/constants.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
+import '../../models/user_info.dart';
 import '../../special_widgets/switch.dart';
 
 //----------------------------------------------------------------------
@@ -18,11 +21,14 @@ class DevicesInASpace extends StatefulWidget {
 class _DevicesInASpace extends State<DevicesInASpace> {
 
   final DatabaseReference reference = FirebaseDatabase.instance.ref();
+  String path='';
 
   @override
   Widget build(BuildContext context) {
+    UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
+    path = replaceSpaces(userInfo.casa!);
     return StreamBuilder<DatabaseEvent>(
-      stream: reference.child("Casa/${widget.space}/Dispositivos").onValue,
+      stream: reference.child("$path/${widget.space}/Dispositivos").onValue,
       builder: (context, snapshot){
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -61,8 +67,8 @@ class _DevicesInASpace extends State<DevicesInASpace> {
                               setState(() {
                                   status = value;
                               });
-                              reference.child("Casa/${widget.space}/Dispositivos/$deviceKey").set({'estado': status});
-                              reference.child("Casa/${widget.space}/Ultimo_modificado").update({'dispositivo': deviceKey,'estado': status});
+                              reference.child("$path/${widget.space}/Dispositivos/$deviceKey").set({'estado': status});
+                              reference.child("$path/${widget.space}/Ultimo_modificado").update({'dispositivo': deviceKey,'estado': status});
                           },
                       ),
                   );

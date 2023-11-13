@@ -35,7 +35,8 @@ class _HouseRegistryState extends State<HouseRegistry> {
     countryStateFuture.then((List<String> countryState){
       if(countryState.isNotEmpty){
         setState(() {
-          widget.registry.country = countryState[1];
+          widget.registry.country = countryState[2];
+          widget.registry.pkState = int.parse(countryState[1]);
           widget.registry.state = countryState[0];
           loading = false;
         });
@@ -145,10 +146,9 @@ class _HouseRegistryState extends State<HouseRegistry> {
                             setState(() {
                               try {
                                 widget.registry.extNum = val;
+                              // ignore: empty_catches
                               } catch (e) {
-                                // ignore: avoid_print
-                                print('Ingresa solo números');
-                          }
+                              }
                           });
                         },
                       )
@@ -169,8 +169,8 @@ class _HouseRegistryState extends State<HouseRegistry> {
                           setState(() {
                             try {
                               widget.registry.intNum = val;
-                            } catch (e) {
-                              print('Ingresa solo números');
+                            // ignore: empty_catches
+                            } catch (e) {                              
                             }
                           });
                         },
@@ -198,8 +198,8 @@ class _HouseRegistryState extends State<HouseRegistry> {
                           setState(() {
                             try {
                               widget.registry.cp = val;
+                            // ignore: empty_catches
                             } catch (e) {
-                              print('Ingresa solo números');
                             }
                           });
                         },

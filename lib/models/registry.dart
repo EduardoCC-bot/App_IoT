@@ -1,7 +1,14 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+
+
 class Registry {
   
+  String? uidDb;
+
   String? email;
   String? password;
+  
   int? pkRol;
   String? name;
   String? apm;
@@ -14,10 +21,12 @@ class Registry {
   int? pkHouse;
   String? houseDescription;
   String? houseType;
+  int? pkHouseType;
   String? housePassword;
 
   String? country;
   String? state;
+  int? pkState;
   String? municipality;
   String? colony;
   String? street;
@@ -30,6 +39,7 @@ class Registry {
   @override
   String toString() {
     return 'UserInformation{'
+      'UID: $uidDb, '
       'email: $email, '
       'password: $password, '
       'rol: $pkRol, '
@@ -43,9 +53,11 @@ class Registry {
       'cve_house: $pkHouse, '
       'houseDescription: $houseDescription, '
       'houseType: $houseType, '
+      'cve_houseType: $pkHouseType, '
       'housePassword: $housePassword, '
       'country: $country, '
       'state: $state, '
+      'cve_state: $pkState, '
       'municipality: $municipality, '
       'colony: $colony, '
       'street: $street, '
@@ -56,24 +68,25 @@ class Registry {
   }
 
   Map<String,dynamic> allDatatoJson(){
+    var passwordInBytes = utf8.encode(housePassword!);
+    var password = sha256.convert(passwordInBytes);
+
     return {
       "crud": "INSERT",
       "data": {
+        "Telefono":{
+            "num_telefonico": telephone,
+            "cve_lada": pkLada,
+            "cve_persona": null,
+        },
         "Persona": {
             "edad": age,
             "correo": email,
             "cve_nombre": null,
-            "cve_rol": null,
-            "cve_casa": null
-        },
-        "Telefono":{
-            "num_telefonico": telephone,
-            "cve_lada": null,
-            "cve_persona": null,
-        },
-        "Lada": {
-          "codigo": int.parse(lada!),
-        },
+            "cve_tiporol": pkRol,
+            "cve_casa": null,
+            "uid_db": uidDb
+        },        
         "Nombre": {
             "nombre": name,
             "apellido_paterno": app,
@@ -83,10 +96,10 @@ class Registry {
             "tamanio": null,
             "descripcion": houseDescription,
             "num_espacios": null,
-            "contrasenia": housePassword,
+            "contrasenia": password.toString(),
             "cve_direccion": null,
-            "cve_tipopropiedad": null,
-            "cve_red": null
+            "cve_tipopropiedad": pkHouseType,
+            "cve_red": 1
         },
         "Direccion": {
             "Calle": street,
@@ -95,23 +108,17 @@ class Registry {
             "cve_cp": null
         },
         "CP": {
-            "descripcion": int.parse(cp!),
+            "descripcion": cp,
             "cve_colonia": null
         },
         "Colonia": {
             "descripcion": colony,
             "cve_municipio": null
         },
-        "municipio": {
+        "Municipio": {
             "descripcion": municipality,
-            "cve_estado": 10
+            "cve_tipoestado": pkState
         },
-        "Red": {
-            "ip": "200.10.0.10",
-            "mascara": "255.255.255.0",
-            "nombre_red": "HomeIoT",
-            "contrasenia_red": "Home@IoT"
-        }
       }
     };
   }
@@ -120,17 +127,18 @@ class Registry {
     return {
       "crud": "INSERT",
       "data": {
+        "Telefono":{
+            "num_telefonico": telephone,
+            "cve_lada": pkLada,
+            "cve_persona": null,
+        },
         "Persona": {
             "edad": age,
             "correo": email,
             "cve_nombre": null,
             "cve_tiporol": pkRol,
-            "cve_casa": pkHouse
-        },
-        "Telefono":{
-            "num_telefonico": telephone,
-            "cve_lada": pkLada,
-            "cve_persona": null,
+            "cve_casa": pkHouse,
+            "uid_db": uidDb
         },
         "Nombre": {
             "nombre": name,
