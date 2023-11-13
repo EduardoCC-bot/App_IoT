@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/models/user_model.dart';
@@ -32,13 +34,12 @@ class AuthService{
     } else {
       var userModel = UserModel();
       userModel.uid = user!.uid;
-      userModel.apellidoMaterno = tempRegistry?.apm;
-      userModel.apellidoPaterno = tempRegistry?.app;
-      userModel.casa = tempRegistry?.houseDescription;
-      userModel.correo = tempRegistry?.email;
-      userModel.edad = tempRegistry?.age;
-      userModel.nombre = tempRegistry?.name;
-      userModel.cveTiporol = tempRegistry?.pkRol;
+      userModel.apellidoMaterno = tempRegistry?.apm;//borrar en un futuro
+      userModel.apellidoPaterno = tempRegistry?.app;//borrar en un futuro
+      userModel.casa = tempRegistry?.houseDescription;//borrar en un futuro
+      userModel.correo = tempRegistry?.email;//borrar en un futuro
+      userModel.edad = tempRegistry?.age;//borrar en un futuro
+      userModel.nombre = tempRegistry?.name;//borrar en un futuro
       tempRegistry = null;
       return userModel;
     }
@@ -55,7 +56,10 @@ class AuthService{
     try{
       storeRegistryTemporarily(registry);
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: registry.email!, password: registry.password!);
-      User? user = result.user; 
+      User? user = result.user;
+      if(user != null) {
+        registry.uidDb = user.uid;
+      }
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());

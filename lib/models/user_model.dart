@@ -6,7 +6,6 @@ class UserModel {
   String? apellidoPaterno;
   String? apellidoMaterno;
   String? rol; //ROL
-  int? cveTiporol;
   String? casa;
   String? correo;
 
@@ -16,10 +15,8 @@ class UserModel {
   @override
   String toString() {
   return 'UserModel(uid: $uid, edad: $edad, nombre: $nombre, apellidoPaterno: $apellidoPaterno, apellidoMaterno: $apellidoMaterno, rol: $rol, casa: $casa, correo: $correo)';
+  }
 }
 
 
-
-  
-}
 

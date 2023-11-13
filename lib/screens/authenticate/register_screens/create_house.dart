@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/join_icon.dart';
 import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/shared/constants.dart';
+import 'package:proyectoiot/shared/sql_functions.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
 import 'package:proyectoiot/special_widgets/dropdown_button.dart';
 
@@ -27,15 +28,29 @@ class _CreateHouseState extends State<CreateHouse> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
-  List<String> houseTypes = ['Casa', 'Departamento', 'Dúplex', 'Cabaña'];
-  String? selectedType;
+  late Map<String,int> houseTypesMap;
+  List<String>? houseTypes=[];
 
-  bool loading = false;
+
+  bool loading = true;
   String error = '';
+
+  void initHouseTypesMap() async {
+    houseTypesMap = await getHouseTypes();
+    setState(() {
+    houseTypes = houseTypesMap.keys.toList();
+    if(houseTypes!.isNotEmpty) {
+      widget.registry.houseType = houseTypes!.first;
+      widget.registry.pkHouseType= (houseTypes!.isNotEmpty ? houseTypesMap[houseTypes!.first] : null);
+      loading = false;
+    }
+   });
+  }
 
   @override
   void initState() {
     super.initState();
+    initHouseTypesMap();
   }
 
   @override
@@ -65,12 +80,16 @@ class _CreateHouseState extends State<CreateHouse> {
                     Flexible(
                       flex: 1,
                       child: dropDownOptions(
-                        (String? newValue) {
-                        setState(() {
-                          widget.registry.houseType = newValue!;
-                          selectedType = newValue;
-                        });
-                      }, houseTypes, selectedType ?? houseTypes.first, 'Tipo de casa')
+                        (newValue) {
+                          setState(() {
+                            widget.registry.houseType = newValue; // Actualizar el valor seleccionado
+                            widget.registry.pkHouseType= (houseTypes!.isNotEmpty && newValue != null ? houseTypesMap[newValue] : null); // Actualizar el valor asociado del mapa
+                          });
+                        },
+                        houseTypes!,
+                        widget.registry.houseType,
+                        "Selecciona el tipo de propiedad" // Etiqueta para el dropdown
+                      )
                     ),
                   ]
                 ),
@@ -108,22 +127,33 @@ class _CreateHouseState extends State<CreateHouse> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: color_11),
                   child: const Text('Continuar',style: TextStyle(color: colorBlanco),),
-                  onPressed:  () async {
-                    widget.registry.pkRol = 1;
+                  onPressed:  () async {            
                     if (_formKey.currentState!.validate()){
-                      setState(() => loading = true);
-                      dynamic result = await _auth.registerWithEmailAndPassword(widget.registry);
+                      //rol de propietario
+                      widget.registry.pkRol = 1;
+
+                      //pone pantalla de carga
+                      setState(() => loading = true);   
+                     
+                      //hace el registro de usuario en firebase
+                      dynamic result = await _auth.registerWithEmailAndPassword(widget.registry);                  
+                      //si el registro fue exitoso, inserta los datos en la SQL
                       if(result == null){
                         setState(() => loading = false);
                         setState(() => error = 'No se pudo registrar con este correo electrónico');
                       }else{
+                        if(widget.registry.pkHouseType != null){
+                        await createHouse(widget.registry);
                         // ignore: use_build_context_synchronously
-                        print(widget.registry);
                         Navigator.of(context).popUntil((route) => route.isFirst);
+                        }else{
+                          setState(() => error = 'Selecciona un tipo de propiedad');
+                        }
                       }
                     }
                    }
                   ),
+
                   const SizedBox(height: 12.0),
                   Text(error, style: const TextStyle(color: Colors.red))
               ],

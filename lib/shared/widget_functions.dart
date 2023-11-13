@@ -128,3 +128,9 @@ TextFormField formBox (String hintText, String error, BuildContext context, OnCh
       onChanged: onChangedCallback,
   );
 }
+
+String replaceSpaces(String text){
+  String newText;
+  newText = text.replaceAll(' ','_');
+  return newText;
+}

@@ -45,6 +45,7 @@ class _RegisterState extends State<Register> {
     ladasKeys = ladasMap.keys.map((key) => key.toString()).toList();
     if(ladasKeys!.isNotEmpty) {
       registry.lada = ladasKeys!.first;
+      registry.pkLada = (ladasKeys!.isNotEmpty ? ladasMap[int.parse(ladasKeys!.first)] : null);
       loading = false;
     }
   });
