@@ -18,6 +18,8 @@ class UserModel {
   return 'UserModel(uid: $uid, edad: $edad, nombre: $nombre, apellidoPaterno: $apellidoPaterno, apellidoMaterno: $apellidoMaterno, rol: $rol, casa: $casa, correo: $correo)';
 }
 
+
+
   
 }
 
