@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/user_icon.dart';
-import 'package:provider/provider.dart';
-import '/models/user_model.dart';
+import '../../models/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -12,20 +10,9 @@ import 'dart:convert';
 //valores que obtendremos al hacer la conexion con la base de datos
 
 
-void testGet() async{
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT%20*%20FROM%20persona");
-  try {
-    final respond = await http.get(url);
-    print(respond.body);
-  } catch (e) {
-    print( e.toString());
-  }  
-}
-
-
 void updateInfo(Map info) async{
   //UPDATE PERSONA
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=UPDATE");
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
   String jsonbody = json.encode(info);
 
   http.post(url,
@@ -44,40 +31,10 @@ void updateInfo(Map info) async{
 }
 
 
-/*
-Future<List<int>> getLada() async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT%20*%20FROM%20Lada");
-  List<int> ladaList = [];
-  try {
-    //final response = await http.get(url);
-      final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      if (jsonResponse['OK'] != null) {
-        /*for (var ladaPair in jsonResponse['OK']) {
-          if (ladaPair is List && ladaPair.isNotEmpty) {
-            ladaList.add(ladaPair[0] as int);
-          }
-        }*/
-      }
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-  //print(ladaList);
-  return ladaList;
-}*/
-
-
-
-
-
-
+// ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  UserInfo user;
+  ProfileScreen({super.key, required this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -99,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil'),
@@ -122,20 +78,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               
               const Text('Nombre'),
               TextField(
-                controller: TextEditingController(text: user!.nombre),
+                controller: TextEditingController(text: widget.user.nombre),
                 enabled: cambio,
                 onChanged: (value) {
-                  user.nombre= value;
+                  widget.user.nombre= value;
                 },
               ),
               const SizedBox(height: 16.0),
 
               const Text('Apellido Paterno:'),
                 TextField(
-                  controller: TextEditingController(text: user.apellidoPaterno),
+                  controller: TextEditingController(text: widget.user.apellidoPaterno),
                   enabled: cambio,
                 onChanged: (value) {
-                  user.apellidoPaterno = value;
+                  widget.user.apellidoPaterno = value;
                 },
 
                 ),
@@ -144,10 +100,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const Text('Apellido Materno:'),
                 TextField(
-                  controller: TextEditingController(text: user.apellidoMaterno),
+                  controller: TextEditingController(text: widget.user.apellidoMaterno),
                   enabled: cambio,
                   onChanged: (value) {
-                  user.apellidoMaterno = value;
+                  widget.user.apellidoMaterno = value;
                 },
                 ),
                 const SizedBox(height: 16.0),
@@ -155,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const Text('Edad:'),
                 TextField(
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
-                  controller: TextEditingController(text: user.edad.toString()),
+                  controller: TextEditingController(text: widget.user.edad.toString()),
                   enabled: cambio,
                   onChanged: (value) {
                   // Intentar convertir la cadena de texto a un entero
@@ -163,12 +119,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   if (parsedValue != null) {
                     // Si la conversión es exitosa, asignar el valor a user.edad
-                      user.edad = parsedValue;
+                      widget.user.edad = parsedValue;
                   } else {
                     // Manejar el caso en el que la entrada no sea un número válido
                     // Podrías mostrar un mensaje de error o tomar alguna acción específica
                     print("Valor nulo");
-                    user.edad = 0;
+                    widget.user.edad = 0;
                   }
                   print(parsedValue);
                 },
@@ -177,20 +133,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const Text('Correo:'),
                 TextField(
-                  controller: TextEditingController(text: user.correo),
+                  controller: TextEditingController(text: widget.user.correo),
                   enabled: cambio,
                 onChanged: (value) {
-                  user.correo = value;
+                  widget.user.correo = value;
                 },
                 ),
                 const Text('Rol:'),
                 TextField(
-                  controller: TextEditingController(text: user.rol),
+                  controller: TextEditingController(text: widget.user.rol),
                   enabled: false,
                 ),
                 const Text('Nombre de la Casa:'),
                 TextField(
-                  controller: TextEditingController(text: user.casa),
+                  controller: TextEditingController(text: widget.user.casa),
                   enabled: false,
                 ),
               const SizedBox(height: 16.0),
@@ -205,7 +161,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         leading: const Icon(Icons.edit, color: color_11),
                         onTap: () {setState(() {
                            cambio = !cambio;
-                            testGet();
                           });
                         },
                       ),
@@ -217,16 +172,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         leading: const Icon(Icons.save_as, color: color_11),
                         onTap: () {
                           cambio = !cambio;
-                          int test = user.edad ?? 0;
-                          print(user.edad);
+                          int test = widget.user.edad ?? 0;
                           print(test);
                           info = {
                             "crud": "UPDATE",
                             "data" : {
-                                "Persona": {
-                                    "edad" : test,
-                                    "correo" : user.correo, 
-                                    "where":"id_persona = 1"
+                                "V_userInfo": {
+                                    "edad" : widget.user.edad ?? 0,
+                                    "correo" : widget.user.correo, 
+                                    "where":"'Uid' = ${widget.user.uid}"
                                 }
                             }
                           };

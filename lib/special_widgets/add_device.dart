@@ -131,7 +131,7 @@ class _AddDeviceState extends State<AddDevice> {
           },
         ),
         TextButton(
-          child: const Text('Aceptar'),
+          child: const Text('Siguiente'),
           onPressed: () {
             verifySelection();
           },

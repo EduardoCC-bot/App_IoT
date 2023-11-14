@@ -28,7 +28,7 @@ class _DevicesInASpace extends State<DevicesInASpace> {
     UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
     path = replaceSpaces(userInfo.casa!);
     return StreamBuilder<DatabaseEvent>(
-      stream: reference.child("$path/${widget.space}/Dispositivos").onValue,
+      stream: reference.child("$path/Espacios/${widget.space}/Dispositivos").onValue,
       builder: (context, snapshot){
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -67,8 +67,8 @@ class _DevicesInASpace extends State<DevicesInASpace> {
                               setState(() {
                                   status = value;
                               });
-                              reference.child("$path/${widget.space}/Dispositivos/$deviceKey").set({'estado': status});
-                              reference.child("$path/${widget.space}/Ultimo_modificado").update({'dispositivo': deviceKey,'estado': status});
+                              reference.child("$path/Espacios/${widget.space}/Dispositivos/$deviceKey").update({'estado': status});
+                              reference.child("$path/Espacios/${widget.space}/Ultimo_modificado").update({'dispositivo': deviceKey,'estado': status});
                           },
                       ),
                   );

@@ -16,7 +16,6 @@ class _TabBarViewHomeState extends State<TabBarViewHome> {
   Widget build(BuildContext context) {
     return const TabBarView(
       children: <Widget>[
-        Center(child: Text('Contenido de Tab 1')),
         DevicesInASpace(space: "Entrada"),
         DevicesInASpace(space: "Cocina"),
         DevicesInASpace(space: "Habitacion"),

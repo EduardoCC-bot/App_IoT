@@ -21,7 +21,6 @@ class _TabBarHomeState extends State<TabBarHome> {
       labelColor: color_11,
       unselectedLabelColor: color_2,
       tabs: [
-        Tab(text: "Todos", icon: Icon(Icons.home)),
         Tab(text: "Entrada", icon: Icon(Icons.meeting_room)),
         Tab(text: "Cocina", icon: Icon(Icons.blender)),
         Tab(text: "Habitación", icon: Icon(Icons.bed)),
