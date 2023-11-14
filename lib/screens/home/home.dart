@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
     return loading ? const Loading() : ChangeNotifierProvider.value(
       value: userInfo,
       child: DefaultTabController(
-        length: 6,
+        length: userInfo.cantEspacios!,
         child: Scaffold(
           backgroundColor: colorBlanco,
           drawer: AppDrawer(onDrawerItemTapped: onDrawerItemTapped),

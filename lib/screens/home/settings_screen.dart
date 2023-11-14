@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/settings_icon.dart';
 import 'package:proyectoiot/special_widgets/switch.dart';
 import 'package:proyectoiot/screens/settings/profile_screen.dart';
 import 'package:proyectoiot/screens/settings/house_details_screen.dart';
+
+import '../../models/user_info.dart';
 //------------------------------------------------------------
 //Pantalla de configuraciones
 //------------------------------------------------------------
@@ -19,6 +22,8 @@ class _SettingsState extends State<Settings> {
   bool status = false;
   @override
   Widget build(BuildContext context){
+    UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
+    print(userInfo);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.center, 
@@ -32,7 +37,7 @@ class _SettingsState extends State<Settings> {
             title: const Text('Detalles de perfil', style:  TextStyle(color: color_0)),
             tileColor: color_5,
             onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen(user: userInfo)));
             },
         ),
         const Divider(),

@@ -84,23 +84,6 @@ Future<Map<String, int>> getHouseTypes() async {
   return houseTypes;
 }
 
-Future<void> insertAllSql(Registry registry) async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/db");
-  Map <String, dynamic> registryMap = registry.allDatatoJson();
-  String body = jsonEncode(registryMap);
-  try {
-  final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
-  
-  if (response.statusCode == 200) {
-    print(response);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-}
-
 //listo
 Future<void> createHouse(Registry registry) async {
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
@@ -120,9 +103,9 @@ Future<void> createHouse(Registry registry) async {
   }
 }
 
-/*
+
 Future<int> isHouseNameUnique(String houseName) async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT%20id_casa%20FROM%20Casa%20WHERE%20casa.descripcion%20=%20%27${registry.houseDescription}%27%20AND%20casa.contrasenia%20=%20STANDARD_HASH(%27${registry.housePassword}%27,%20%27SHA256%27)");
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT COUNT(*) FROM Casa WHERE casa.descripcion = '$houseName'");
   int flag = 0; // Variable para almacenar el número
 
   try {
@@ -154,10 +137,11 @@ Future<int> isHouseNameUnique(String houseName) async {
   print(flag);
   return flag;
 }
-*/
 
+
+//listo
 Future<Map<String, dynamic>> getUserInfo(String uid) async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT n.nombre, n.apellido_paterno, n.apellido_materno, p.edad, p.correo, r.descripcion, c.descripcion, p.uid_db FROM Nombre n, Persona p, TipoRol r, Casa c WHERE n.id_nombre = p.cve_nombre AND r.id_tiporol = p.cve_tiporol AND c.id_casa = p.cve_casa AND p.uid_db = '$uid'");
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT n.nombre, n.apellido_paterno, n.apellido_materno, p.edad, p.correo, r.descripcion, c.descripcion, p.uid_db, c.id_casa, (SELECT COUNT(*) FROM Espacio WHERE Espacio.cve_casa = c.id_casa) FROM Nombre n, Persona p, TipoRol r, Casa c WHERE n.id_nombre = p.cve_nombre AND r.id_tiporol = p.cve_tiporol AND c.id_casa = p.cve_casa AND p.uid_db = '$uid'");
   Map<String, dynamic> userInfo = {};
 
   try {
@@ -168,7 +152,7 @@ Future<Map<String, dynamic>> getUserInfo(String uid) async {
 
       if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
         var userArray = jsonResponse['OK'][0];
-        if (userArray is List && userArray.length == 8) {
+        if (userArray is List && userArray.length == 10) {
           // Llenar el mapa userInfo con los datos del usuario
           userInfo = {
             'nombre': userArray[0],
@@ -178,7 +162,9 @@ Future<Map<String, dynamic>> getUserInfo(String uid) async {
             'correo': userArray[4],
             'rol': userArray[5],
             'casa': userArray[6],
-            'uid': userArray[7]
+            'uid': userArray[7],
+            'pkCasa': userArray[8],
+            'cantEspacios': userArray[9]
           };
         }
       }

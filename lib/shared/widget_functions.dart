@@ -33,7 +33,7 @@ IconData getIconoLuz(num value){
 }
 
 IconData getIconoTemperatura(num value){
-    if(value >= 100){
+    if(value >= 50){
       return Icons.local_fire_department;
     } else if(value >= 19){
       return Icons.thermostat;
@@ -43,7 +43,7 @@ IconData getIconoTemperatura(num value){
 }
 
 IconData getIconoGas(num value){
-    if(value >= 10){
+    if(value >= 30){
       return Icons.gas_meter;
     }else{
       return Icons.propane_tank;
