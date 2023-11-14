@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/user_icon.dart';
-import 'package:provider/provider.dart';
 import '../../models/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,7 +12,7 @@ import 'dart:convert';
 
 void updateInfo(Map info) async{
   //UPDATE PERSONA
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=UPDATE");
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
   String jsonbody = json.encode(info);
 
   http.post(url,
@@ -174,14 +173,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onTap: () {
                           cambio = !cambio;
                           int test = widget.user.edad ?? 0;
-                          print(widget.user.edad);
+                          print(test);
                           info = {
                             "crud": "UPDATE",
                             "data" : {
-                                "Persona": {
-                                    "edad" : test,
+                                "V_userInfo": {
+                                    "edad" : widget.user.edad ?? 0,
                                     "correo" : widget.user.correo, 
-                                    "where":"id_persona = 1"
+                                    "where":"'Uid' = ${widget.user.uid}"
                                 }
                             }
                           };
