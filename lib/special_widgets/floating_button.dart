@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:proyectoiot/models/house_info.dart';
 import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/special_widgets/add_device.dart';
+import 'package:proyectoiot/special_widgets/add_something.dart';
+import '../../models/user_info.dart';
+
 
 // ignore: camel_case_types
 class AddAreaDevice extends StatelessWidget {
@@ -10,6 +14,8 @@ class AddAreaDevice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserInfo userInfo = Provider.of<UserInfo>(context); 
+    HouseInfo houseInfo = Provider.of<HouseInfo>(context); // Obteniendo HouseInfo
     return FloatingActionButton(
       foregroundColor: colorBlanco,
       backgroundColor: color_1,
@@ -24,18 +30,18 @@ class AddAreaDevice extends StatelessWidget {
                 child: ListBody(
                   children: <Widget>[
                     GestureDetector(
-                      child: const Text('Añadir un área', style: TextStyle(color: color_0)),
+                      child: const Text('Añadir un dispositivo', style: TextStyle(color: color_0)),
                        onTap: () {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return const AddDevice();
+                            return AddSomething(pkCasa: houseInfo.idCasa, houseName: userInfo.casa!);
                           },
                         );
                       },
                     ),
-                    const Padding(padding: EdgeInsets.all(8.0)),
-                    divider,
+                    //const Padding(padding: EdgeInsets.all(8.0)),
+                    /*divider,
                     const Padding(padding: EdgeInsets.all(8.0)),
                     GestureDetector(
                       child: const Text('Añadir un dispositivo', style: TextStyle(color: color_0)),
@@ -47,7 +53,7 @@ class AddAreaDevice extends StatelessWidget {
                           },
                         );
                       },
-                    ),
+                    ),*/
                   ],
                 ),
               ),

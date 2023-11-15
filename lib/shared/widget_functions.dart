@@ -134,3 +134,9 @@ String replaceSpaces(String text){
   newText = text.replaceAll(' ','_');
   return newText;
 }
+
+String replaceUnderscore(String text){
+  String newText;
+  newText = text.replaceAll('_',' ');
+  return newText;
+}
