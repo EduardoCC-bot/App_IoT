@@ -3,9 +3,9 @@ import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/user_icon.dart';
 import '../../models/user_info.dart';
+import '../../models/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:proyectoiot/services/auth.dart';
 
 //valores que obtendremos al hacer la conexion con la base de datos
 
@@ -31,6 +31,7 @@ void updateInfo(Map info) async{
 }
 
 
+// ignore: must_be_immutable
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
   UserInfo user;

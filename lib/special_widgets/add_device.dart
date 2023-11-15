@@ -1,146 +1,121 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-//import 'package:proyectoiot/shared/constants.dart';
-//import '../shared/sql_functions.dart';
+import 'package:proyectoiot/screens/loading.dart';
+import 'package:proyectoiot/shared/constants.dart';
+import 'package:proyectoiot/shared/sql_functions.dart';
+import 'package:proyectoiot/special_widgets/dropdown_button.dart';
+
+import '../shared/widget_functions.dart';
 
 class AddDevice extends StatefulWidget {
-  const AddDevice({super.key});
+  final int pkArea;
+  final int pkDeviceType;
+  final String selectedDevice;
+  final String houseName;
+  final String areaName;
+  const AddDevice({super.key, required this.pkArea, required this.pkDeviceType, required this.selectedDevice, required this.houseName, required this.areaName});
 
   @override
   State<AddDevice> createState() => _AddDeviceState();
 }
 
 class _AddDeviceState extends State<AddDevice> {
+  final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
-  late Future<List<String>> areas;
-  late Future<List<String>> devices;
-  String? selectedArea;
-  String? selectedDevice;
-  String? errorArea;
-  String? errorDevice;
+  late Map<String,int> devicesFromTypesMap;
+  List<String>? devicesFromTypes = [];
+  String? selectedDeviceFromType;
+  int? pkDeviceFromType;
 
-  void onAreaSelected(dynamic area) {
-    // Actualiza el estado y maneja los errores
+  String? deviceName;
+
+  void initDevicesFromTypes() async {
+    devicesFromTypesMap = await getDevicesFromType(widget.selectedDevice);
     setState(() {
-      selectedArea = area;
-      errorArea = (area == null || area.isEmpty) ? 'Seleccione un área' : null;
+      devicesFromTypes = devicesFromTypesMap.keys.toList();
+      if(devicesFromTypes!.isNotEmpty) {
+        selectedDeviceFromType = devicesFromTypes!.first;
+        pkDeviceFromType = devicesFromTypesMap[selectedDeviceFromType];
+      }
+      loading = false;
     });
-  }
-
-  void onDeviceSelected(dynamic device) {
-    // Actualiza el estado y maneja los errores
-    setState(() {
-      selectedDevice = device;
-      errorDevice = (device == null || device.isEmpty) ? 'Seleccione un dispositivo' : null;
-    });
-  }
-
-  void verifySelection() {
-    // Verifica la selección y maneja los errores
-    if (selectedArea == null || selectedArea!.isEmpty) {
-      setState(() {
-        errorArea = 'Seleccione un área';
-      });
-    }
-    if (selectedDevice == null || selectedDevice!.isEmpty) {
-      setState(() {
-        errorDevice = 'Seleccione un dispositivo';
-      });
-    }
-
-    if (errorArea == null && errorDevice == null) {
-      // Todo seleccionado correctamente
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    }
   }
 
   @override
   void initState() {
     super.initState();
-   /*areas = getLada();
-    areas.then((List<int> ladasList){
-      if(ladasList.isNotEmpty){
-        setState(() {
-          registry.lada = ladasList.first.toString();
-        });
-      }
-    });*/
+    initDevicesFromTypes();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Selecciona las opciones'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: DropdownButton<String>(
-              isExpanded: true,
-              value: selectedArea,
-              hint: const Text('Área'),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedArea = newValue;
-                  errorArea = null;
-                });
-              },
-              items: <String>['Opción 1', 'Opción 2', 'Opción 3']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+    return loading ? const Loading() : AlertDialog(
+      title: const Text('Añade tu dispositivo', style: TextStyle(color: color_0),),
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: formBox('Nombre del dispositivo', 'Complete el campo', context, (val) => deviceName = val),
             ),
-          ),
-          if (errorArea != null)
-              Text(errorArea!, style: const TextStyle(color: Colors.red)),
- //--------------------------------------------------------------------------
-          Flexible(
-            flex: 1,
-            child: DropdownButton<String>(
-              isExpanded: true,
-              value: selectedDevice,
-              hint: const Text('Dispositivo'),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedDevice = newValue;
-                  errorDevice = null;
-                });
-              },
-              items: <String>['Opción A', 'Opción B', 'Opción C']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            const Padding(padding: EdgeInsets.all(12.0)),
+            Flexible(
+              flex: 1,
+              child: dropDownOptions(
+                (newValue) {
+                  setState(() {
+                    selectedDeviceFromType = newValue;
+                    pkDeviceFromType = devicesFromTypesMap[newValue];
+                  });
+                },
+                devicesFromTypes!,
+                selectedDeviceFromType,
+                "Tipo de ${widget.selectedDevice}"
+              )
             ),
-          ),
-          if (errorDevice  != null)
-              Text(errorDevice !, style: const TextStyle(color: Colors.red)),
-        ],
-//--------------------------------------------------------------------------              
+          ],
+        ),
       ),
       actions: <Widget>[
         TextButton(
           child: const Text('Cancelar'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         TextButton(
-          child: const Text('Aceptar'),
-          onPressed: () {
-            verifySelection();
+          child: const Text('Siguiente'),
+          onPressed: () async {
+            if (_formKey.currentState!.validate()) {
+              try {
+                setState(() => loading = true);
+                await addDevice(deviceName!, widget.pkArea, pkDeviceFromType!, widget.pkDeviceType, widget.selectedDevice);
+                await insertDeviceNoSQL(widget.houseName, widget.areaName, deviceName!, widget.selectedDevice);
+              } catch (error) {
+                // ignore: avoid_print
+                print('Ocurrió un error: $error');
+              } finally {
+                setState(() => loading = false);
+                if (mounted) {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              }
+            }
           },
         ),
       ],
     );
   }
+
+  Future<void> insertDeviceNoSQL(String house, String areaName, String deviceName, String deviceType) async {
+    String housePath = replaceSpaces(house);
+    String devicePath = replaceSpaces(deviceName);
+    DatabaseReference ref = FirebaseDatabase.instance.ref("$housePath/Espacios/$areaName/Dispositivos/$devicePath");
+    await ref.update({
+      "dispositivo": deviceType,
+      "estado": false,
+      "version": 1
+    });
+  }
 }
-
-
-
-

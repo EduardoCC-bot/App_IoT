@@ -45,9 +45,9 @@ class SensorMonitor {
     ];
 
     for (final path in sensorPaths) {
-      StreamSubscription<DatabaseEvent> subscription = reference.child("$housePath/$path").onValue.listen((event) {
+      StreamSubscription<DatabaseEvent> subscription = reference.child("$housePath/Ultima_sensores/$path").onValue.listen((event) {
           final sensorName = path.split('_').last;
-          final value = num.tryParse(event.snapshot.child(sensorName).value.toString()) ?? 0.0;
+          final value = num.tryParse(event.snapshot.child('valor').value.toString()) ?? 0.0;
           _sensorData[sensorName] = value;
           _controller!.add(Map<String, num>.from(_sensorData));  // Emitir una copia del mapa
       });

@@ -10,14 +10,15 @@ class UserInfo extends ChangeNotifier{
   String? rol; //ROL
   String? casa;
   String? correo;
-  int? telefono;
-  String? nombreCasa;
+  int? pkCasa;
+  int? cantEspacios;
+
 
   UserInfo();
 
   @override
   String toString() {
-  return 'UserInfo(uid: $uid, edad: $edad, nombre: $nombre, apellidoPaterno: $apellidoPaterno, apellidoMaterno: $apellidoMaterno, rol: $rol, casa: $casa, correo: $correo)';
+  return 'UserInfo(uid: $uid, edad: $edad, nombre: $nombre, apellidoPaterno: $apellidoPaterno, apellidoMaterno: $apellidoMaterno, rol: $rol, casa: $casa, pkCasa: $pkCasa, cantEspacios: $cantEspacios, correo: $correo)';
   }
 
   void updateFromApi(Map<String, dynamic> apiData) {
@@ -29,7 +30,8 @@ class UserInfo extends ChangeNotifier{
     casa = apiData['casa'];
     correo = apiData['correo'];
     uid = apiData['uid'];
-    nombreCasa = apiData['casa'];
+    pkCasa = apiData['pkCasa'];
+    cantEspacios = apiData['cantEspacios'];
 
     // Notificar a los oyentes que los datos han cambiado
     notifyListeners();

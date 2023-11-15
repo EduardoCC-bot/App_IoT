@@ -142,7 +142,7 @@ class _RegisterState extends State<Register> {
                         },
                         ladasKeys!,
                         registry.lada,
-                        "Select Lada" // Etiqueta para el dropdown
+                        "Lada" // Etiqueta para el dropdown
                       )
                     ),
                     const SizedBox(width: 6),

@@ -104,6 +104,7 @@ class _CreateHouseState extends State<CreateHouse> {
                     ),
                   ],
                 ),
+                const Text('Elige bien el nombre de tu casa, ya que después no podrás cambiarlo', style: TextStyle(color: Colors.grey),textAlign: TextAlign.center,),
 //-------------------------------------------------------------------------------------------------------------------                
                 const SizedBox(height: 20.0),
                 Row(
@@ -134,21 +135,26 @@ class _CreateHouseState extends State<CreateHouse> {
 
                       //pone pantalla de carga
                       setState(() => loading = true);   
-                     
-                      //hace el registro de usuario en firebase
-                      dynamic result = await _auth.registerWithEmailAndPassword(widget.registry);                  
-                      //si el registro fue exitoso, inserta los datos en la SQL
-                      if(result == null){
-                        setState(() => loading = false);
-                        setState(() => error = 'No se pudo registrar con este correo electrónico');
-                      }else{
-                        if(widget.registry.pkHouseType != null){
-                        await createHouse(widget.registry);
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      if((await isHouseNameUnique(widget.registry.houseDescription!)) == 0){
+                        //hace el registro de usuario en firebase
+                        dynamic result = await _auth.registerWithEmailAndPassword(widget.registry);                  
+                        //si el registro fue exitoso, inserta los datos en la SQL
+                        if(result == null){
+                          setState(() => loading = false);
+                          setState(() => error = 'No se pudo registrar con este correo electrónico');
                         }else{
-                          setState(() => error = 'Selecciona un tipo de propiedad');
+                          if(widget.registry.pkHouseType != null){
+                          await createHouse(widget.registry);
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).popUntil((route) => route.isFirst);
+                          }else{
+                            setState(() => loading = false);
+                            setState(() => error = 'Selecciona un tipo de propiedad');
+                          }
                         }
+                      } else{
+                        setState(() => loading = false);
+                        setState(() => error = 'Ese nombre ya ha sido ocupado');
                       }
                     }
                    }

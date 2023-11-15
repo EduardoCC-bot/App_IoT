@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyectoiot/models/house_info.dart';
 import 'package:proyectoiot/screens/home/settings_screen.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
 import 'package:proyectoiot/special_widgets/floating_button.dart';
@@ -30,6 +31,7 @@ class _HomeState extends State<Home> {
   String header='Inicio';
   Widget? floatingButton;
   UserInfo userInfo = UserInfo();
+  HouseInfo? houseInfo;
   bool loading = true;
 
   void onDrawerItemTapped(int itemIndex) {
@@ -58,10 +60,19 @@ class _HomeState extends State<Home> {
 
   Future<void> verifyAndGetData(String uid) async {
     Map<String, dynamic> userData = await getUserInfo(uid);
-      
+    
     if (userData.isNotEmpty && userData['nombre'] != null) {
+      // Crea una instancia temporal de HouseInfo solo después de actualizar userInfo
+      UserInfo tempUserInfo = UserInfo();
+      tempUserInfo.updateFromApi(userData);
+
+      HouseInfo tempHouseInfo = HouseInfo(idCasa: tempUserInfo.pkCasa!);
+      await tempHouseInfo.obtenerEspacios(replaceSpaces(tempUserInfo.casa!));
+
       setState(() {
-        userInfo.updateFromApi(userData);
+        // Actualiza userInfo y houseInfo dentro de setState
+        userInfo = tempUserInfo;
+        houseInfo = tempHouseInfo;
         loading = false;
       });
     } else {
@@ -84,24 +95,36 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) { 
+    print(userInfo);
+    print(houseInfo); 
+    int tabLength = 1; // Valor predeterminado
+    if (houseInfo != null && houseInfo!.espacios.isNotEmpty) {
+      tabLength = houseInfo!.espacios.length; // Usa la longitud de 'espacios'
+    }  
     return loading ? const Loading() : ChangeNotifierProvider.value(
+      //proveemos a userInfo
       value: userInfo,
-      child: DefaultTabController(
-        length: 6,
-        child: Scaffold(
-          backgroundColor: colorBlanco,
-          drawer: AppDrawer(onDrawerItemTapped: onDrawerItemTapped),
-          appBar: AppBar(
-            title: Text(header),
-            centerTitle: true,
-            backgroundColor: color_1,
-            elevation: 5.0,
+      child: ChangeNotifierProvider.value(
+      //proveemos a houseInfo
+        value: houseInfo!,
+      //pantalla home
+        child: DefaultTabController(
+          length: tabLength,
+          child: Scaffold(
+            backgroundColor: colorBlanco,
+            drawer: AppDrawer(onDrawerItemTapped: onDrawerItemTapped),
+            appBar: AppBar(
+              title: Text(header),
+              centerTitle: true,
+              backgroundColor: color_1,
+              elevation: 5.0,
+            ),
+            floatingActionButton: floatingButton, 
+            body: buildScreen(),
           ),
-          floatingActionButton: floatingButton, 
-          body: buildScreen(),
         ),
-      ),
+      )
     );
   }
 }
