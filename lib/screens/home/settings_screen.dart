@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyectoiot/models/house_info.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/images_icons/settings_icon.dart';
 import 'package:proyectoiot/special_widgets/switch.dart';
@@ -23,7 +24,9 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context){
     UserInfo userInfo = Provider.of<UserInfo>(context, listen: false);
-    print(userInfo);
+    HouseInfo houseInfo = Provider.of<HouseInfo>(context, listen: false);
+    print("User Info: " + userInfo.toString());
+    print("house Info: " + houseInfo.toString());
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.center, 
@@ -46,7 +49,7 @@ class _SettingsState extends State<Settings> {
             title: const Text('Detalles de casa', style:  TextStyle(color: color_0)),
             tileColor: color_5,
             onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HouseDetailsScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => HouseDetailsScreen(house: houseInfo)));
             },
         ), 
         const Divider(),

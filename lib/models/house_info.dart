@@ -9,7 +9,6 @@ class HouseInfo extends ChangeNotifier{
   int? idTipoCasa;
   String? direccion;
   Map<String, String> espacios = {};
-
   Map<String,List<dynamic>>? integrantesRol; //MAPA, CLAVE ES EL NOMBRE, VALOR ES UNA LISTA DEL ROL Y LA PK DEL ROL
   //EJEMPLO
   //["Eduardo Carreño Contreras" : [Propietario, 1], "Omar Díaz Buzo" : [Residente, 2]]
@@ -19,8 +18,16 @@ class HouseInfo extends ChangeNotifier{
   HouseInfo({required this.idCasa});
 
   void updateFromApi(Map<String, dynamic> apiData) {
+    nombreNoSQL = apiData['nombreNoSQL'];
+    idTipoCasa = apiData['id_tipoCasa'];
+    tipoCasa = apiData['tipo_casa'];
+    direccion = apiData['direccion'];
     // Notificar a los oyentes que los datos han cambiado
     notifyListeners();
+  }
+
+  void updateHomeusers(Map<String, dynamic> apiData){
+      
   }
 
   Future<void> obtenerEspacios(String casa) async {

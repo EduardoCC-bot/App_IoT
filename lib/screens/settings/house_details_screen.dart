@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/login_Icon.dart';
 import 'package:provider/provider.dart';
 import '/models/user_model.dart';
+import '../../models/house_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 
 void updateInfo(Map info) async{
   //UPDATE PERSONA
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
   String jsonbody = json.encode(info);
-
+  print(jsonbody);
   http.post(url,
   headers: <String, String>{
     'Content-Type': 'application/json',   
@@ -30,9 +32,10 @@ void updateInfo(Map info) async{
 
 
 //valores que obtendremos al hacer la conexion con la base de datos
+// ignore: must_be_immutable
 class HouseDetailsScreen extends StatefulWidget {
-
-  const HouseDetailsScreen({super.key});
+  HouseInfo house;
+  HouseDetailsScreen({super.key, required this.house});
 
   @override
   State<HouseDetailsScreen> createState() => _HouseDetailsScreen();
@@ -54,7 +57,6 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel?>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Casa'),
@@ -78,30 +80,36 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
               
               const Text('Nombre Casa'),
               TextField(
-              controller: TextEditingController(text: user!.nombre),
+              controller: TextEditingController(text: widget.house.nombreNoSQL),
               enabled: cambio,
+              onChanged: (value) {
+                  widget.house.nombreNoSQL = value;
+              },
               ),
               const SizedBox(height: 16.0),
 
               const Text('Direccion'),
                 TextField(
-                  controller: TextEditingController(text: user.apellidoPaterno),
-                  enabled: cambio,
+                  maxLines: null,   
+                  controller: TextEditingController(text: widget.house.direccion),
+                  enabled: false,
                 ),
-
+                
                 const SizedBox(height: 16.0),
 
                 
                 const Text('TIPO DE PROPIEDAD'),
                 TextField(
-                  controller: TextEditingController(text: user.apellidoMaterno),
-                  enabled: cambio,
+                  controller: TextEditingController(text: widget.house.tipoCasa),
+                  enabled: false,
                 ),
                 const SizedBox(height: 16.0),
 
                 const Text('INTEGRANTES DE LA CASA'),
+                
+
                 TextField(
-                  controller: TextEditingController(text: user.apellidoMaterno),
+                  controller: TextEditingController(text: "HACER EL DESPLEGABLE DE LAS LISTAS"),
                   enabled: cambio,
                 ),
                 const SizedBox(height: 16.0),
@@ -126,8 +134,16 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                         title: const Text('Confirmar cambios', style:  TextStyle(color: color_0)),
                         leading: const Icon(Icons.save_as, color: color_11),
                         onTap: () {
-                          //cambio = !cambio;
-
+                          Map info = {
+                              "crud": "UPDATE",
+                              "data": {
+                                  "V_HOUSEDETALIS": {
+                                      "descripcion": widget.house.nombreNoSQL,
+                                      "where": "ID_CASA = ${widget.house.idCasa}"
+                                  }
+                              }
+                          };
+                          updateInfo(info);
                         },  
                       ),
                     ),

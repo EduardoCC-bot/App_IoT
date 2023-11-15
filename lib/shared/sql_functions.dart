@@ -179,6 +179,73 @@ Future<Map<String, dynamic>> getUserInfo(String uid) async {
 }
 
 //listo
+Future<Map<String, dynamic>> getHouseInfo(int id_casa) async {
+var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOUSEDETALIS where ID_casa = ${id_casa}");
+  Map<String, dynamic> homeusersInfo = {};
+
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+
+      if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
+        var homeArray = jsonResponse['OK'][0];
+        if (homeArray is List && homeArray.length == 12) {
+          // Llenar el mapa userInfo con los datos del usuario
+          homeusersInfo = {
+            'nombreNoSQL': homeArray[1],
+            'id_tipoCasa': homeArray[2],
+            'tipo_casa': homeArray[3],
+            'direccion': homeArray[4] + ' ' + homeArray[5].toString() + ' ' + homeArray[6].toString() + ' ' + homeArray[7].toString() + ' ' + homeArray[8] + ' ' + homeArray[9] + ' ' + homeArray[10] + ' ' + homeArray[11],
+          };
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+
+  return homeusersInfo;
+}
+
+//listo
+Future<Map<String, dynamic>> getusersHouse(int id_casa) async {
+var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOMEUSER WHERE ID_CASA = ${id_casa}");
+  Map<String, dynamic> homeInfo = {};
+
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+
+      if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
+        var homeArray = jsonResponse['OK'][0];
+        if (homeArray is List && homeArray.length == 12) {
+          // Llenar el mapa userInfo con los datos del usuario
+          homeInfo = {
+            'nombreNoSQL': homeArray[1],
+            'id_tipoCasa': homeArray[2],
+            'tipo_casa': homeArray[3],
+            'direccion': homeArray[4] + ' ' + homeArray[5].toString() + ' ' + homeArray[6].toString() + ' ' + homeArray[7].toString() + ' ' + homeArray[8] + ' ' + homeArray[9] + ' ' + homeArray[10] + ' ' + homeArray[11],
+          };
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+
+  return homeInfo;
+}
+
+
+//listo
 Future<void> joinHouse(Registry registry) async {
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
   Map <String, dynamic> registryMap = registry.userDatatoJson();

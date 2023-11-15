@@ -68,6 +68,8 @@ class _HomeState extends State<Home> {
 
       HouseInfo tempHouseInfo = HouseInfo(idCasa: tempUserInfo.pkCasa!);
       await tempHouseInfo.obtenerEspacios(replaceSpaces(tempUserInfo.casa!));
+      Map<String, dynamic> homeData = await getHouseInfo(tempUserInfo.pkCasa!);
+      tempHouseInfo.updateFromApi(homeData);
 
       setState(() {
         // Actualiza userInfo y houseInfo dentro de setState

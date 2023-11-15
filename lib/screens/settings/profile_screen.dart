@@ -3,7 +3,6 @@ import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/user_icon.dart';
 import '../../models/user_info.dart';
-import '../../models/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -177,7 +176,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               "data": {
                                   "V_userinfo": {
                                       "edad": edadN,
-                                      //"correo": widget.user.correo,
                                       "where": "UID_DB = ${widget.user.uid}"
                                   }
                               }
