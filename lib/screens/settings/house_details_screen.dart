@@ -6,41 +6,32 @@ import '/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+void updateInfo(Map info) async{
+  //UPDATE PERSONA
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
+  String jsonbody = json.encode(info);
 
-//valores que obtendremos al hacer la conexion con la base de datos
-
-
-
-Future<List<int>> getLada() async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/db?db=SQL&crud=SELECT&data=SELECT%20*%20FROM%20Lada");
-  List<int> ladaList = [];
-  try {
-    //final response = await http.get(url);
-      final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      if (jsonResponse['OK'] != null) {
-        /*for (var ladaPair in jsonResponse['OK']) {
-          if (ladaPair is List && ladaPair.isNotEmpty) {
-            ladaList.add(ladaPair[0] as int);
-          }
-        }*/
-      }
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-  //print(ladaList);
-  return ladaList;
+  http.post(url,
+  headers: <String, String>{
+    'Content-Type': 'application/json',   
+    'Server': 'nginx/1.22.1',
+    'Access-Control-Allow-Origin':'*',
+    },
+    body: jsonbody
+  ).then((response){
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+  }).catchError( (error) {
+      print('Error: $error');
+  });
 }
 
 
 
 
+//valores que obtendremos al hacer la conexion con la base de datos
 class HouseDetailsScreen extends StatefulWidget {
+
   const HouseDetailsScreen({super.key});
 
   @override
@@ -92,7 +83,7 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
               ),
               const SizedBox(height: 16.0),
 
-              const Text('Apellido Paterno:'),
+              const Text('Direccion'),
                 TextField(
                   controller: TextEditingController(text: user.apellidoPaterno),
                   enabled: cambio,
@@ -100,33 +91,17 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
 
                 const SizedBox(height: 16.0),
 
-                const Text('Apellido Materno:'),
+                
+                const Text('TIPO DE PROPIEDAD'),
                 TextField(
                   controller: TextEditingController(text: user.apellidoMaterno),
                   enabled: cambio,
                 ),
                 const SizedBox(height: 16.0),
 
-                const Text('Edad:'),
+                const Text('INTEGRANTES DE LA CASA'),
                 TextField(
-                  controller: TextEditingController(text: user.edad.toString()),
-                  enabled: cambio,
-                ),
-                const SizedBox(height: 16.0),
-
-                const Text('Correo:'),
-                TextField(
-                  controller: TextEditingController(text: user.correo),
-                  enabled: cambio,
-                ),
-                const Text('Rol:'),
-                TextField(
-                  controller: TextEditingController(text: user.rol),
-                  enabled: cambio,
-                ),
-                const Text('Nombre de la Casa:'),
-                TextField(
-                  controller: TextEditingController(text: user.casa),
+                  controller: TextEditingController(text: user.apellidoMaterno),
                   enabled: cambio,
                 ),
                 const SizedBox(height: 16.0),
@@ -137,11 +112,10 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                     Expanded( // Para que ambos ListTiles ocupen el mismo espacio
                       child: ListTile(
                         tileColor: color_5,
-                        title: Text('Cambiar infromacion', style:  TextStyle(color: color_0)),
-                        leading: Icon(Icons.edit, color: color_11),
+                        title: const Text('Cambiar infromacion', style:  TextStyle(color: color_0)),
+                        leading: const Icon(Icons.edit, color: color_11),
                         onTap: () {setState(() {
                            cambio = !cambio;
-                            //getla();
                           });
                         },
                       ),
@@ -149,10 +123,11 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                     Expanded(
                       child: ListTile(
                         tileColor: color_5,
-                        title: Text('Confirmar cambios', style:  TextStyle(color: color_0)),
-                        leading: Icon(Icons.save_as, color: color_11),
+                        title: const Text('Confirmar cambios', style:  TextStyle(color: color_0)),
+                        leading: const Icon(Icons.save_as, color: color_11),
                         onTap: () {
-                          cambio = !cambio;
+                          //cambio = !cambio;
+
                         },  
                       ),
                     ),

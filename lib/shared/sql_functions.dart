@@ -168,7 +168,7 @@ Future<Map<String, dynamic>> getUserInfo(String uid) async {
 
       if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
         var userArray = jsonResponse['OK'][0];
-        if (userArray is List && userArray.length == 8) {
+        if (userArray is List && userArray.length >= 8) {
           // Llenar el mapa userInfo con los datos del usuario
           userInfo = {
             'nombre': userArray[0],

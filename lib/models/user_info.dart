@@ -10,7 +10,8 @@ class UserInfo extends ChangeNotifier{
   String? rol; //ROL
   String? casa;
   String? correo;
-
+  int? telefono;
+  String? nombreCasa;
 
   UserInfo();
 
@@ -28,6 +29,7 @@ class UserInfo extends ChangeNotifier{
     casa = apiData['casa'];
     correo = apiData['correo'];
     uid = apiData['uid'];
+    nombreCasa = apiData['casa'];
 
     // Notificar a los oyentes que los datos han cambiado
     notifyListeners();

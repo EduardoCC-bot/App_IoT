@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyectoiot/models/registry.dart';
 import 'package:proyectoiot/models/user_model.dart';
@@ -78,7 +77,6 @@ class AuthService{
       return null;
     }
   }
-
   //salir
   Future signOut() async{
     try{
