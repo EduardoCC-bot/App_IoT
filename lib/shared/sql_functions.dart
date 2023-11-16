@@ -298,31 +298,6 @@ Future<int> verifyHouseCredentials(Registry registry) async {
   return flag;
 }
 
-//no listo
-Future<List<String>> getAreaTypes(int lada) async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.tipoespacio");
-  List<String> areaTypes = [];
-  try {
-    final response = await http.get(url);
-    
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      if (jsonResponse['OK'] != null) {
-        for (var data in jsonResponse['OK']) {
-          if (data is List && data.isNotEmpty) {
-            areaTypes.add(data.toString());
-          }
-        }
-      }
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-  print(areaTypes);
-  return areaTypes;
-}
 
 //listo
 Future<Map<String, int>> getAreas(int pkCasa) async {
@@ -416,6 +391,127 @@ Future<void> addDevice(String description, int cveSpace, int cveDevicefromtype, 
           "cve_espacio": cveSpace,
           "cve_tipo$selectedDeviceType": cveDevicefromtype,
           "cve_tipodispositivo": cveDevicetype
+      }
+    }
+  };
+  String body = jsonEncode(deviceJSON);
+  print(body);
+  try {
+  final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
+  
+  if (response.statusCode == 200) {
+    print(response);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+}
+
+Future<int> verifyDevieUniqueName(String name, int pkSpace) async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT COUNT(*) FROM SOFIDBA_02.dispositivo d WHERE d.descripcion = '$name' AND d.cve_espacio = $pkSpace");
+  int flag = 0; // Variable para almacenar el número
+
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      //decodifica la respuesta
+      var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+      //si el contenido de OK es diferente de nulo y es una lista
+      if (jsonResponse['OK'] != null && jsonResponse['OK'] is List) {
+        //obtengo la lista de OK
+        List jsonResponseList = jsonResponse['OK'];
+        //si la lista no está vacía y el primer elemento es otra lista
+        if (jsonResponseList.isNotEmpty && jsonResponseList.first is List) {
+          //obtengo la primera sublista
+          List innerList = jsonResponseList.first;
+          //si la sublista no está vacía y el primer elemento es entero, lo guardo
+          if (innerList.isNotEmpty && innerList.first is int) {
+            flag = innerList.first;
+          }
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+  //regreso la flag
+  return flag;
+}
+
+Future<int> verifyAreaUniqueName(String name, int pkHouse) async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT COUNT(*) FROM SOFIDBA_02.Espacio e WHERE e.cve_casa = $pkHouse AND e.descripcion = '$name'");
+  int flag = 0; // Variable para almacenar el número
+
+  try {
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      //decodifica la respuesta
+      var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+      //si el contenido de OK es diferente de nulo y es una lista
+      if (jsonResponse['OK'] != null && jsonResponse['OK'] is List) {
+        //obtengo la lista de OK
+        List jsonResponseList = jsonResponse['OK'];
+        //si la lista no está vacía y el primer elemento es otra lista
+        if (jsonResponseList.isNotEmpty && jsonResponseList.first is List) {
+          //obtengo la primera sublista
+          List innerList = jsonResponseList.first;
+          //si la sublista no está vacía y el primer elemento es entero, lo guardo
+          if (innerList.isNotEmpty && innerList.first is int) {
+            flag = innerList.first;
+          }
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+  //regreso la flag
+  return flag;
+}
+
+Future<Map<String, int>> getAreasTypes() async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.tipoespacio");
+  Map<String, int> areaTypes = {};
+  try {
+    final response = await http.get(url);
+    
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(utf8.decode(response.bodyBytes));      
+      if (jsonResponse['OK'] != null) {
+        for (var pair in jsonResponse['OK']) {
+          if (pair is List && pair.length == 2) {
+            String typeName = pair[0]; // Concatenando los dos primeros elementos
+            int typeId = pair[1]; // El tercer elemento es un int
+            areaTypes[typeName] = typeId; // Agrega el par al mapa
+          }
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+  return areaTypes;
+}
+
+
+Future<void> addArea(String description, int cveCasa, int cveTipoEspacio) async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
+  Map<String,dynamic> deviceJSON ={
+    "crud": "INSERT",
+    "data": {
+      "Espacio":{
+          "descripcion": description,
+          "num_dispositivos": 1,
+          "cve_tipoespacio": cveTipoEspacio,
+          "cve_casa": cveCasa
       }
     }
   };

@@ -3,6 +3,8 @@ import 'package:proyectoiot/screens/loading.dart';
 import 'package:proyectoiot/shared/sql_functions.dart';
 import 'package:proyectoiot/special_widgets/add_device.dart';
 import 'package:proyectoiot/special_widgets/dropdown_button.dart';
+
+import '../shared/constants.dart';
 //import 'package:proyectoiot/shared/constants.dart';
 
 // ignore: must_be_immutable
@@ -18,6 +20,7 @@ class AddSomething extends StatefulWidget {
 class _AddSomethingState extends State<AddSomething> {
   
   bool loading = true;
+  bool enabled = false;
 
   late Map<String,int> areasMap;
   List<String>? areas=[];
@@ -38,6 +41,7 @@ class _AddSomethingState extends State<AddSomething> {
     if(areas!.isNotEmpty) {
       selectedArea = areas!.first;
       pkArea = (areas!.isNotEmpty ? areasMap[areas!.first] : null);
+      enabled = true;
     }
    });
   }
@@ -64,7 +68,7 @@ class _AddSomethingState extends State<AddSomething> {
   @override
   Widget build(BuildContext context) {
     return loading ? const Loading() : AlertDialog(
-      title: const Text('Selecciona las opciones'),
+      title: const Text('Selecciona las opciones', style: TextStyle(color: color_0),),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -82,6 +86,11 @@ class _AddSomethingState extends State<AddSomething> {
               "Área" // Etiqueta para el dropdown
             )
           ),
+           if (areas == null || areas!.isEmpty) // Condición para mostrar el mensaje
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text("Esta casa aún no cuenta con áreas creadas", textAlign: TextAlign.center, style: TextStyle(color: Colors.red, fontSize: 12)),
+            ),
           const Padding(padding: EdgeInsets.all(12.0)),
  //--------------------------------------------------------------------------
           Flexible(
@@ -109,8 +118,8 @@ class _AddSomethingState extends State<AddSomething> {
           },
         ),
         TextButton(
-          child: const Text('Siguiente'),
-          onPressed: () {
+          onPressed: enabled ? () {
+           if(pkArea!= null) {
            Navigator.pop(context);
            showDialog(
               context: context,
@@ -124,7 +133,12 @@ class _AddSomethingState extends State<AddSomething> {
                 );
               },
             ); 
-          },
+           } else{
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).popUntil((route) => route.isFirst);
+           }
+          } : null,
+          child: const Text('Siguiente'),
         ),
       ],
     );
