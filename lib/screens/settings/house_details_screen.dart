@@ -1,3 +1,4 @@
+import 'package:proyectoiot/screens/home/mainly_screen.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/login_Icon.dart';
@@ -6,7 +7,7 @@ import '../../models/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:proyectoiot/special_widgets/dropdown_button.dart';
-import 'package:proyectoiot/shared/sql_functions.dart';
+
 
 
 
@@ -31,6 +32,66 @@ void updateInfo(Map info) async{
   });
 }
 
+void updateInfoRoles(Map info, List<String>? cat) async{
+  //UPDATE PERSONA
+  //FUNCION GET
+    int? id_nombre;
+    print(info);
+    print("aqui arriba es joven");
+    info.forEach((nombreCompleto, value) async {
+          List<String> partesNombre = nombreCompleto.split(" ");
+          String nombre = partesNombre[0];
+          String apellidoPaterno = partesNombre.length > 1 ? partesNombre[1] : "";
+          String apellidoMaterno = partesNombre.length > 2 ? partesNombre[2] : "";
+          String rolCambio = value;
+
+        var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT ID_NOMBRE FROM SOFIDBA_02.NOMBRE WHERE Nombre = '${nombre}' AND apellido_paterno = '${apellidoPaterno}' AND apellido_materno = '${apellidoMaterno}'");
+        try {
+          final response = await http.get(url);
+          if (response.statusCode == 200) {
+            var jsonResponse = json.decode(response.body);
+            if (jsonResponse['OK'] != null) {
+              for (var pair in jsonResponse['OK']) {
+                if (pair is List && pair.length == 1) {
+                    id_nombre = pair[0];
+                    print(id_nombre);
+                }
+              }
+            }
+          } else {
+            print('Request failed with status: ${response.statusCode}.');
+          }
+        } catch (e) {
+          print('An error occurred: $e');
+        }
+         
+          info = {
+            "crud": "UPDATE",
+            "data": {
+                "PERSONA": {
+                  "cve_tiporol" : cat!.indexOf(rolCambio) + 1 ,
+                  "where" : "CVE_NOMBRE = $id_nombre"
+                }
+            }
+          };
+          url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
+          String jsonbody = json.encode(info);
+          print(jsonbody);
+          http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json',   
+            'Server': 'nginx/1.22.1',
+            'Access-Control-Allow-Origin':'*',
+            },
+            body: jsonbody
+          ).then((response){
+              print('Response status: ${response.statusCode}');
+              print('Response body: ${response.body}');
+          }).catchError( (error) {
+              print('Error: $error');
+          });
+     });
+}
 
 
 
@@ -50,7 +111,7 @@ class HouseDetailsScreen extends StatefulWidget {
 class _HouseDetailsScreen extends State<HouseDetailsScreen> {
   late Future<List<int>> ladas; 
   bool cambio = false;
-  Map info = {};  
+  Map inforol = {};  
   
 
   @override
@@ -63,7 +124,6 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.house.catrol);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Casa'),
@@ -134,7 +194,8 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                           child: 
                             dropDownOptions((newValue) { 
                               setState(() {
-                              lista[0][0] = newValue.toString();
+                                lista[0][0] = newValue.toString();
+                                inforol[clave] = lista[0][0];
                             });
                             }, widget.house.catrol!, lista[0][0], "ROL")
                         ),
@@ -142,7 +203,7 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                     );
                   }).toList(),
                 ),
-
+                
               const SizedBox(height: 32.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta el alineamiento de los elementos
@@ -173,7 +234,10 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                                   }
                               }
                           };
+                          print(inforol);
+
                           updateInfo(info);
+                          updateInfoRoles(inforol, widget.house.catrol);
                         },  
                       ),
                     ),

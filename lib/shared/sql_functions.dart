@@ -1,7 +1,4 @@
 // ignore_for_file: avoid_print
-import 'dart:html';
-import 'dart:ui_web';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/registry.dart';
