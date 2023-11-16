@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyectoiot/models/house_info.dart';
 import 'package:proyectoiot/shared/constants.dart';
-import 'package:proyectoiot/special_widgets/add_something.dart';
+import 'package:proyectoiot/special_widgets/add_area.dart';
+import 'package:proyectoiot/special_widgets/add_select_device.dart';
 import '../../models/user_info.dart';
 
 
@@ -40,20 +41,20 @@ class AddAreaDevice extends StatelessWidget {
                         );
                       },
                     ),
-                    //const Padding(padding: EdgeInsets.all(8.0)),
-                    /*divider,
+                    const Padding(padding: EdgeInsets.all(8.0)),
+                    divider,
                     const Padding(padding: EdgeInsets.all(8.0)),
                     GestureDetector(
-                      child: const Text('Añadir un dispositivo', style: TextStyle(color: color_0)),
+                      child: const Text('Crear un área', style: TextStyle(color: color_0)),
                       onTap: () {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return const AddDevice();
+                            return AddArea(pkHouse: houseInfo.idCasa, houseName: userInfo.casa!, houseInfo: houseInfo,);
                           },
                         );
                       },
-                    ),*/
+                    ),
                   ],
                 ),
               ),

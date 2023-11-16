@@ -5,6 +5,8 @@ import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/shared/sql_functions.dart';
 import 'package:proyectoiot/shared/widget_functions.dart';
 import 'package:proyectoiot/special_widgets/dropdown_button.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 
 import '../../../services/auth.dart';
 import '../../loading.dart';
@@ -145,6 +147,7 @@ class _CreateHouseState extends State<CreateHouse> {
                         }else{
                           if(widget.registry.pkHouseType != null){
                           await createHouse(widget.registry);
+                          await insertHouseNoSQL(widget.registry.houseDescription!);
                           // ignore: use_build_context_synchronously
                           Navigator.of(context).popUntil((route) => route.isFirst);
                           }else{
@@ -168,5 +171,15 @@ class _CreateHouseState extends State<CreateHouse> {
         )
       ),
     );
+  }
+
+
+  Future<void> insertHouseNoSQL(String house) async {
+    String housePath = replaceSpaces(house);
+    DatabaseReference refH = FirebaseDatabase.instance.ref(housePath);
+    await refH.update({
+      "nombre": house,
+      "version": 1
+    });
   }
 }

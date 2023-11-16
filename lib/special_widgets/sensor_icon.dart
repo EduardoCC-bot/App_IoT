@@ -25,6 +25,8 @@ class SensorIconTextState extends State<SensorIconText> {
   
   @override
   Widget build(BuildContext context) {
+    String floatnumber = widget.value.toStringAsFixed(1);
+    num finalnumber = num.parse(floatnumber);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -35,14 +37,14 @@ class SensorIconTextState extends State<SensorIconText> {
           ),
           padding: const EdgeInsets.all(16.0),
           child: Icon(
-            getIconForValor(widget.sensorName, widget.value),
+            getIconForValor(widget.sensorName, finalnumber),
             color: color_0,
             size: 30.0,
           ),
         ),
         const SizedBox(height: 8.0),
         Text(
-          getValueWithEscale(widget.sensorName, widget.value),
+          getValueWithEscale(widget.sensorName, finalnumber),
           style: const TextStyle(
             color: color_0,
             fontSize: 15.0,

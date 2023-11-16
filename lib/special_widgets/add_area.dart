@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:proyectoiot/models/house_info.dart';
 import 'package:proyectoiot/screens/loading.dart';
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:proyectoiot/shared/sql_functions.dart';
@@ -7,38 +8,36 @@ import 'package:proyectoiot/special_widgets/dropdown_button.dart';
 
 import '../shared/widget_functions.dart';
 
-class AddDevice extends StatefulWidget {
-  final int pkArea;
-  final int pkDeviceType;
-  final String selectedDevice;
+class AddArea extends StatefulWidget {
+  final int pkHouse;
   final String houseName;
-  final String areaName;
-  const AddDevice({super.key, required this.pkArea, required this.pkDeviceType, required this.selectedDevice, required this.houseName, required this.areaName});
+  final HouseInfo houseInfo;
+
+  const AddArea({super.key, required this.pkHouse, required this.houseName, required this.houseInfo});
 
   @override
-  State<AddDevice> createState() => _AddDeviceState();
+  State<AddArea> createState() => _AddAreaState();
 }
 
-class _AddDeviceState extends State<AddDevice> {
+class _AddAreaState extends State<AddArea> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
   bool? validName = true;
 
+  late Map<String,int> areaTypesMap;
+  List<String>? areaTypes = [];
+  String? selectedAreaType;
+  int? pkOfAreaType;
 
-  late Map<String,int> devicesFromTypesMap;
-  List<String>? devicesFromTypes = [];
-  String? selectedDeviceFromType;
-  int? pkDeviceFromType;
+  String? areaName;
 
-  String? deviceName;
-
-  void initDevicesFromTypes() async {
-    devicesFromTypesMap = await getDevicesFromType(widget.selectedDevice);
+  void initAreasTypes() async {
+    areaTypesMap = await getAreasTypes();
     setState(() {
-      devicesFromTypes = devicesFromTypesMap.keys.toList();
-      if(devicesFromTypes!.isNotEmpty) {
-        selectedDeviceFromType = devicesFromTypes!.first;
-        pkDeviceFromType = devicesFromTypesMap[selectedDeviceFromType];
+      areaTypes = areaTypesMap.keys.toList();
+      if(areaTypes!.isNotEmpty) {
+        selectedAreaType = areaTypes!.first;
+        pkOfAreaType = areaTypesMap[selectedAreaType];
       }
       loading = false;
     });
@@ -47,13 +46,13 @@ class _AddDeviceState extends State<AddDevice> {
   @override
   void initState() {
     super.initState();
-    initDevicesFromTypes();
+    initAreasTypes();
   }
 
   @override
   Widget build(BuildContext context) {
     return loading ? const Loading() : AlertDialog(
-      title: const Text('Añade tu dispositivo', style: TextStyle(color: color_0),),
+      title: const Text('Crea tu área', style: TextStyle(color: color_0),),
       content: Form(
         key: _formKey,
         child: Column(
@@ -61,29 +60,28 @@ class _AddDeviceState extends State<AddDevice> {
           children: <Widget>[
             Flexible(
               flex: 1,
-              child: formBox('Nombre del dispositivo', 'Complete el campo', context, (val) => deviceName = val),
+              child: formBox('Nombre de tu nueva área', 'Complete el campo', context, (val) => areaName = val),
             ),
-
+            
             if (validName! == false) // Condición para mostrar el mensaje
             const Padding(
               padding: EdgeInsets.only(top: 10),
               child: Text("Ese nombre ya ha sido ocupado", textAlign: TextAlign.center, style: TextStyle(color: Colors.red, fontSize: 12)),
             ),
             const Padding(padding: EdgeInsets.all(12.0)),
-
-
+            
             Flexible(
               flex: 1,
               child: dropDownOptions(
                 (newValue) {
                   setState(() {
-                    selectedDeviceFromType = newValue;
-                    pkDeviceFromType = devicesFromTypesMap[newValue];
+                    selectedAreaType = newValue;
+                    pkOfAreaType = areaTypesMap[newValue];
                   });
                 },
-                devicesFromTypes!,
-                selectedDeviceFromType,
-                "Tipo de ${widget.selectedDevice}"
+                areaTypes!,
+                selectedAreaType,
+                "Tipo de área"
               )
             ),
           ],
@@ -100,14 +98,15 @@ class _AddDeviceState extends State<AddDevice> {
             if (_formKey.currentState!.validate()) {
               try {
                 setState(() => loading = true);
-                if((await verifyDevieUniqueName(deviceName!, widget.pkArea))== 0){
-                  await addDevice(deviceName!, widget.pkArea, pkDeviceFromType!, widget.pkDeviceType, widget.selectedDevice);
-                  await insertDeviceNoSQL(widget.houseName, widget.areaName, deviceName!, widget.selectedDevice);
+                if((await verifyAreaUniqueName(areaName!, widget.pkHouse))== 0){
+                  await addArea(areaName!, widget.pkHouse,pkOfAreaType!);
+                  await insertAreaNoSQL(widget.houseName,areaName!,selectedAreaType!);
+                  widget.houseInfo.obtenerEspacios(replaceSpaces(widget.houseName));
                   setState(() => loading = false);
                   if (mounted) {
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   }
-                } else {
+                } else{
                   setState(() => validName = false);
                   setState(() => loading = false);
                 }
@@ -122,14 +121,17 @@ class _AddDeviceState extends State<AddDevice> {
     );
   }
 
-  Future<void> insertDeviceNoSQL(String house, String areaName, String deviceName, String deviceType) async {
+  Future<void> insertAreaNoSQL(String house, String areaName, String areType) async {
     String housePath = replaceSpaces(house);
-    String devicePath = replaceSpaces(deviceName);
-    DatabaseReference ref = FirebaseDatabase.instance.ref("$housePath/Espacios/$areaName/Dispositivos/$devicePath");
+    String areaPath = replaceSpaces(areaName);
+    DatabaseReference ref = FirebaseDatabase.instance.ref("$housePath/Espacios/$areaPath");
     await ref.update({
-      "dispositivo": deviceType,
-      "estado": false,
+      "descripcion": areType,
       "version": 1
+    });
+    ref = FirebaseDatabase.instance.ref("$housePath/Nombre_espacios");
+    await ref.update({
+      areaPath: areType,
     });
   }
 }

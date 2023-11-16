@@ -105,20 +105,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) { 
     print(userInfo);
     print(houseInfo); 
-    int tabLength = 1; // Valor predeterminado
-    if (houseInfo != null && houseInfo!.espacios.isNotEmpty) {
-      tabLength = houseInfo!.espacios.length; // Usa la longitud de 'espacios'
-    }  
-    return loading ? const Loading() : ChangeNotifierProvider.value(
-      //proveemos a userInfo
-      value: userInfo,
-      child: ChangeNotifierProvider.value(
-      //proveemos a houseInfo
-        value: houseInfo!,
-      //pantalla home
-        child: DefaultTabController(
-          length: tabLength,
-          child: Scaffold(
+
+    return loading ? const Loading() : MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: userInfo),
+        ChangeNotifierProvider.value(value: houseInfo!),
+      ],
+      child: Consumer<HouseInfo>(
+        builder: (context, houseInfo, child) {
+          int tabLength = houseInfo.espacios.isNotEmpty ? houseInfo.espacios.length : 1;
+          return Scaffold(
             backgroundColor: colorBlanco,
             drawer: AppDrawer(onDrawerItemTapped: onDrawerItemTapped),
             appBar: AppBar(
@@ -128,10 +124,13 @@ class _HomeState extends State<Home> {
               elevation: 5.0,
             ),
             floatingActionButton: floatingButton, 
-            body: buildScreen(),
-          ),
-        ),
-      )
+            body: DefaultTabController(
+              length: tabLength,
+              child: buildScreen(),
+            ),
+          );
+        },
+      ),
     );
   }
 }
