@@ -1,11 +1,14 @@
 import 'package:proyectoiot/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoiot/images_icons/login_Icon.dart';
-import 'package:provider/provider.dart';
-import '/models/user_model.dart';
 import '../../models/house_info.dart';
+import '../../models/user_info.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:proyectoiot/special_widgets/dropdown_button.dart';
+import 'package:proyectoiot/shared/sql_functions.dart';
+
+
 
 
 void updateInfo(Map info) async{
@@ -31,11 +34,13 @@ void updateInfo(Map info) async{
 
 
 
+
 //valores que obtendremos al hacer la conexion con la base de datos
 // ignore: must_be_immutable
 class HouseDetailsScreen extends StatefulWidget {
   HouseInfo house;
-  HouseDetailsScreen({super.key, required this.house});
+  UserInfo user;
+  HouseDetailsScreen({super.key, required this.house, required this.user});
 
   @override
   State<HouseDetailsScreen> createState() => _HouseDetailsScreen();
@@ -47,6 +52,7 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
   bool cambio = false;
   Map info = {};  
   
+
   @override
   void initState() {
     cambio = false;
@@ -57,6 +63,7 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.house.catrol);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Casa'),
@@ -105,15 +112,38 @@ class _HouseDetailsScreen extends State<HouseDetailsScreen> {
                 ),
                 const SizedBox(height: 16.0),
 
-                const Text('INTEGRANTES DE LA CASA'),
                 
-
-                TextField(
-                  controller: TextEditingController(text: "HACER EL DESPLEGABLE DE LAS LISTAS"),
-                  enabled: cambio,
-                ),
+                const Text('INTEGRANTES DE LA CASA'),
                 const SizedBox(height: 16.0),
 
+                Column(
+                  children: widget.house.integrantesRol!.entries.map((entry) {
+                    String clave = entry.key;
+                    List lista = entry.value;
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: TextEditingController(text: clave),
+                            decoration: InputDecoration(labelText: 'Nombre'),
+                            enabled: false,
+                          ),
+                        ),
+                        SizedBox(width: 10), // Espacio entre el TextField y el DropdownButton
+                        Expanded(
+                          child: 
+                            dropDownOptions((newValue) { 
+                              setState(() {
+                              lista[0][0] = newValue.toString();
+                            });
+                            }, widget.house.catrol!, lista[0][0], "ROL")
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+
+              const SizedBox(height: 32.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Ajusta el alineamiento de los elementos
                   children: [
