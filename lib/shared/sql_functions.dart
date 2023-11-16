@@ -1,4 +1,7 @@
 // ignore_for_file: avoid_print
+import 'dart:html';
+import 'dart:ui_web';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/registry.dart';
@@ -188,7 +191,6 @@ var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELEC
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
-
       if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
         var homeArray = jsonResponse['OK'][0];
         if (homeArray is List && homeArray.length == 12) {
@@ -207,31 +209,29 @@ var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELEC
   } catch (e) {
     print('An error occurred: $e');
   }
-
   return homeusersInfo;
 }
 
 //listo
-Future<Map<String, dynamic>> getusersHouse(int id_casa) async {
-var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOMEUSER WHERE ID_CASA = ${id_casa}");
-  Map<String, dynamic> homeInfo = {};
+Future<Map<String, List<dynamic>>> getusersHouse(int id_casa) async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOMEUSER WHERE ID_CASA = ${id_casa}");
+  Map<String, List<dynamic>> homeInfo = {};
 
   try {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
+      print(jsonResponse);
 
       if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
-        var homeArray = jsonResponse['OK'][0];
-        if (homeArray is List && homeArray.length == 12) {
-          // Llenar el mapa userInfo con los datos del usuario
-          homeInfo = {
-            'nombreNoSQL': homeArray[1],
-            'id_tipoCasa': homeArray[2],
-            'tipo_casa': homeArray[3],
-            'direccion': homeArray[4] + ' ' + homeArray[5].toString() + ' ' + homeArray[6].toString() + ' ' + homeArray[7].toString() + ' ' + homeArray[8] + ' ' + homeArray[9] + ' ' + homeArray[10] + ' ' + homeArray[11],
-          };
+        for (var userHomeArray in jsonResponse['OK']) {
+          if (userHomeArray is List && userHomeArray.length == 6) {
+            // obtener la lista
+            List<dynamic> lista = homeInfo["${userHomeArray[1]} ${userHomeArray[2]} ${userHomeArray[3]}"] ?? [];
+            lista.add([userHomeArray[4], userHomeArray[5]]);
+            homeInfo["${userHomeArray[1]} ${userHomeArray[2]} ${userHomeArray[3]}"] = lista;
+          }
         }
       }
     } else {
@@ -240,9 +240,10 @@ var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELEC
   } catch (e) {
     print('An error occurred: $e');
   }
-
+  print(homeInfo);
   return homeInfo;
 }
+
 
 
 //listo
@@ -432,4 +433,33 @@ Future<void> addDevice(String description, int cveSpace, int cveDevicefromtype, 
   } catch (e) {
     print('An error occurred: $e');
   }
+}
+
+//listo
+Future<List<String>> getCatrol() async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.TIPOROL");
+  List<String> rolesList = [];
+
+  try {
+    final response = await http.get(url);
+    
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      if (jsonResponse['OK'] != null) {
+        for (var ladaPair in jsonResponse['OK']) {
+          if (ladaPair is List && ladaPair.length >= 2) {
+            String rol = ladaPair[0];
+            // int primaryKey = ladaPair[1]; // Si necesitas la clave primaria, puedes descomentar esta línea
+            rolesList.add(rol);
+          }
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+
+  return rolesList;
 }

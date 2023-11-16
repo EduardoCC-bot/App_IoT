@@ -49,7 +49,7 @@ class _SettingsState extends State<Settings> {
             title: const Text('Detalles de casa', style:  TextStyle(color: color_0)),
             tileColor: color_5,
             onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => HouseDetailsScreen(house: houseInfo)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => HouseDetailsScreen(house: houseInfo, user: userInfo)));
             },
         ), 
         const Divider(),

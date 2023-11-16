@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,6 +10,7 @@ class HouseInfo extends ChangeNotifier{
   int? idTipoCasa;
   String? direccion;
   Map<String, String> espacios = {};
+  List<String>? catrol;
   Map<String,List<dynamic>>? integrantesRol; //MAPA, CLAVE ES EL NOMBRE, VALOR ES UNA LISTA DEL ROL Y LA PK DEL ROL
   //EJEMPLO
   //["Eduardo Carreño Contreras" : [Propietario, 1], "Omar Díaz Buzo" : [Residente, 2]]
@@ -26,8 +28,11 @@ class HouseInfo extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateHomeusers(Map<String, dynamic> apiData){
-      
+  void updateHomeusers(Map<String, List<dynamic>> apiData, List<String> apicatrol){
+    integrantesRol = apiData;
+    catrol = apicatrol;
+    catrol = catrol!.toSet().toList();
+    notifyListeners();
   }
 
   Future<void> obtenerEspacios(String casa) async {
