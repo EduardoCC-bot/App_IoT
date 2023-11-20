@@ -69,12 +69,13 @@ class _HomeState extends State<Home> {
 
       HouseInfo tempHouseInfo = HouseInfo(idCasa: tempUserInfo.pkCasa!);
       await tempHouseInfo.obtenerEspacios(replaceSpaces(tempUserInfo.casa!));
+      await tempHouseInfo.noSQLName(replaceSpaces(tempUserInfo.casa!));
+
       Map<String, dynamic> homeData = await getHouseInfo(tempUserInfo.pkCasa!);
-      Map<String, List<dynamic>> homeuserinfo = await getusersHouse(tempUserInfo.pkCasa!);
-      List<String> catrol = await getCatrol();
+      Map<String, List<dynamic>> homeuserinfo = await getUsersHouse(tempUserInfo.pkCasa!);
 
       tempHouseInfo.updateFromApi(homeData);
-      tempHouseInfo.updateHomeusers(homeuserinfo, catrol);
+      tempHouseInfo.updateHomeusers(homeuserinfo);
       
       setState(() {
         // Actualiza userInfo y houseInfo dentro de setState

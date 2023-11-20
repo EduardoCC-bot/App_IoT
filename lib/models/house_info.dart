@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
+import 'package:proyectoiot/shared/widget_functions.dart';
 
 class HouseInfo extends ChangeNotifier{
   
@@ -10,7 +11,6 @@ class HouseInfo extends ChangeNotifier{
   int? idTipoCasa;
   String? direccion;
   Map<String, String> espacios = {};
-  List<String>? catrol;
   Map<String,List<dynamic>>? integrantesRol; //MAPA, CLAVE ES EL NOMBRE, VALOR ES UNA LISTA DEL ROL Y LA PK DEL ROL
   //EJEMPLO
   //["Eduardo Carreño Contreras" : [Propietario, 1], "Omar Díaz Buzo" : [Residente, 2]]
@@ -19,8 +19,20 @@ class HouseInfo extends ChangeNotifier{
 
   HouseInfo({required this.idCasa});
 
-  void updateFromApi(Map<String, dynamic> apiData) {
-    nombreNoSQL = apiData['nombreNoSQL'];
+   //Nombre NOSQL DE LA CASA
+  Future<void> noSQLName(String casa) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("$casa/nombre"); // Asegúrate de especificar la ruta correcta
+    DatabaseEvent event = await ref.once();
+    if (event.snapshot.exists &&  event.snapshot.value != null) {
+      nombreNoSQL = event.snapshot.value as String;
+    }else{
+      nombreNoSQL = replaceUnderscore(casa);
+    }
+    notifyListeners();
+  }
+
+  //INFORMACION DE LA CASA
+  void updateFromApi(Map<String, dynamic> apiData) async {
     idTipoCasa = apiData['id_tipoCasa'];
     tipoCasa = apiData['tipo_casa'];
     direccion = apiData['direccion'];
@@ -28,10 +40,9 @@ class HouseInfo extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateHomeusers(Map<String, List<dynamic>> apiData, List<String> apicatrol){
+  //INTEGRANTES DE LA CASA Y ROLES
+  void updateHomeusers(Map<String, List<dynamic>> apiData){
     integrantesRol = apiData;
-    catrol = apicatrol;
-    catrol = catrol!.toSet().toList();
     notifyListeners();
   }
 

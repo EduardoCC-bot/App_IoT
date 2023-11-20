@@ -124,8 +124,9 @@ class _AddDeviceState extends State<AddDevice> {
 
   Future<void> insertDeviceNoSQL(String house, String areaName, String deviceName, String deviceType) async {
     String housePath = replaceSpaces(house);
+    String areaPath = replaceSpaces(areaName);
     String devicePath = replaceSpaces(deviceName);
-    DatabaseReference ref = FirebaseDatabase.instance.ref("$housePath/Espacios/$areaName/Dispositivos/$devicePath");
+    DatabaseReference ref = FirebaseDatabase.instance.ref("$housePath/Espacios/$areaPath/Dispositivos/$devicePath");
     await ref.update({
       "dispositivo": deviceType,
       "estado": false,

@@ -138,7 +138,6 @@ Future<int> isHouseNameUnique(String houseName) async {
   return flag;
 }
 
-
 //listo
 Future<Map<String, dynamic>> getUserInfo(String uid) async {
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT n.nombre, n.apellido_paterno, n.apellido_materno, p.edad, p.correo, r.descripcion, c.descripcion, p.uid_db, c.id_casa, (SELECT COUNT(*) FROM SOFIDBA_02.Espacio espacio WHERE Espacio.cve_casa = c.id_casa) FROM SOFIDBA_02.Nombre n, SOFIDBA_02.Persona p, SOFIDBA_02.TipoRol r, SOFIDBA_02.Casa c WHERE n.id_nombre = p.cve_nombre AND r.id_tiporol = p.cve_tiporol AND c.id_casa = p.cve_casa AND p.uid_db = '$uid'");
@@ -177,71 +176,6 @@ Future<Map<String, dynamic>> getUserInfo(String uid) async {
 
   return userInfo;
 }
-
-//listo
-Future<Map<String, dynamic>> getHouseInfo(int id_casa) async {
-var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOUSEDETALIS where ID_casa = ${id_casa}");
-  Map<String, dynamic> homeusersInfo = {};
-
-  try {
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
-        var homeArray = jsonResponse['OK'][0];
-        if (homeArray is List && homeArray.length == 12) {
-          // Llenar el mapa userInfo con los datos del usuario
-          homeusersInfo = {
-            'nombreNoSQL': homeArray[1],
-            'id_tipoCasa': homeArray[2],
-            'tipo_casa': homeArray[3],
-            'direccion': homeArray[4] + ' ' + homeArray[5].toString() + ' ' + homeArray[6].toString() + ' ' + homeArray[7].toString() + ' ' + homeArray[8] + ' ' + homeArray[9] + ' ' + homeArray[10] + ' ' + homeArray[11],
-          };
-        }
-      }
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-  return homeusersInfo;
-}
-
-//listo
-Future<Map<String, List<dynamic>>> getusersHouse(int id_casa) async {
-  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOMEUSER WHERE ID_CASA = ${id_casa}");
-  Map<String, List<dynamic>> homeInfo = {};
-
-  try {
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      var jsonResponse = json.decode(response.body);
-      print(jsonResponse);
-
-      if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
-        for (var userHomeArray in jsonResponse['OK']) {
-          if (userHomeArray is List && userHomeArray.length == 6) {
-            // obtener la lista
-            List<dynamic> lista = homeInfo["${userHomeArray[1]} ${userHomeArray[2]} ${userHomeArray[3]}"] ?? [];
-            lista.add([userHomeArray[4], userHomeArray[5]]);
-            homeInfo["${userHomeArray[1]} ${userHomeArray[2]} ${userHomeArray[3]}"] = lista;
-          }
-        }
-      }
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-  print(homeInfo);
-  return homeInfo;
-}
-
-
 
 //listo
 Future<void> joinHouse(Registry registry) async {
@@ -296,7 +230,6 @@ Future<int> verifyHouseCredentials(Registry registry) async {
   return flag;
 }
 
-
 //listo
 Future<Map<String, int>> getAreas(int pkCasa) async {
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT e.descripcion, e.id_espacio FROM SOFIDBA_02.espacio e WHERE e.cve_casa = $pkCasa");
@@ -323,7 +256,6 @@ Future<Map<String, int>> getAreas(int pkCasa) async {
   }
   return areas;
 }
-
 
 //listo
 Future<Map<String, int>> getDevicesTypes() async {
@@ -377,7 +309,6 @@ Future<Map<String, int>> getDevicesFromType(String type) async {
   }
   return devicesFromTypes;
 }
-
 
 Future<void> addDevice(String description, int cveSpace, int cveDevicefromtype, int cveDevicetype, String selectedDeviceType) async {
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
@@ -507,7 +438,7 @@ Future<void> addArea(String description, int cveCasa, int cveTipoEspacio) async 
     "data": {
       "Espacio":{
           "descripcion": description,
-          "num_dispositivos": 1,
+          "num_dispositivos": 0,
           "cve_tipoespacio": cveTipoEspacio,
           "cve_casa": cveCasa
       }
@@ -528,10 +459,77 @@ Future<void> addArea(String description, int cveCasa, int cveTipoEspacio) async 
   }
 }
 
+
 //listo
-Future<List<String>> getCatrol() async {
+Future<Map<String, dynamic>> getHouseInfo(int idCasa) async {
+var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOUSEDETALIS where ID_casa = $idCasa");
+  Map<String, dynamic> homeusersInfo = {};
+
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
+        var homeArray = jsonResponse['OK'][0];
+        if (homeArray is List && homeArray.length == 12) {
+          // Llenar el mapa userInfo con los datos del usuario
+          homeusersInfo = {
+            'nombreNoSQL': homeArray[1],
+            'id_tipoCasa': homeArray[2],
+            'tipo_casa': homeArray[3],
+            'direccion': homeArray[4] + ' ' + homeArray[5].toString() + ' ' + homeArray[6].toString() + ' ' + homeArray[7].toString() + ' ' + homeArray[8] + ' ' + homeArray[9] + ' ' + homeArray[10] + ' ' + homeArray[11],
+          };
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+  return homeusersInfo;
+}
+
+//listo
+Future<Map<String, List<dynamic>>> getUsersHouse(int idCasa) async {
+  var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.V_HOMEUSER WHERE ID_CASA = $idCasa");
+  Map<String, List<dynamic>> homeInfo = {};
+  String name;
+
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+
+      if (jsonResponse['OK'] != null && jsonResponse['OK'].isNotEmpty) {
+        for (var userHomeArray in jsonResponse['OK']) {
+          if (userHomeArray is List && userHomeArray.length == 7) {
+            // obtener la lista
+            name = "${userHomeArray[1]} ${userHomeArray[2]} ${userHomeArray[3]}";
+            List<dynamic> valueslist = [];
+            valueslist.add([userHomeArray[4], userHomeArray[5], userHomeArray[6]]);
+            homeInfo[name] = valueslist;
+          }
+        }
+      }
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+  print(homeInfo);
+  return homeInfo;
+}
+
+
+//listo
+Future<Map<String, int>> getRolTypes() async {
   var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql?crud=SELECT&data=SELECT * FROM SOFIDBA_02.TIPOROL");
-  List<String> rolesList = [];
+  Map<String, int> rolMap = {};
 
   try {
     final response = await http.get(url);
@@ -540,10 +538,10 @@ Future<List<String>> getCatrol() async {
       var jsonResponse = json.decode(response.body);
       if (jsonResponse['OK'] != null) {
         for (var ladaPair in jsonResponse['OK']) {
-          if (ladaPair is List && ladaPair.length >= 2) {
+          if (ladaPair is List && ladaPair.length == 2) {
             String rol = ladaPair[0];
-            // int primaryKey = ladaPair[1]; // Si necesitas la clave primaria, puedes descomentar esta línea
-            rolesList.add(rol);
+            int primaryKey = ladaPair[1]; // la clave primaria
+            rolMap[rol] = primaryKey;
           }
         }
       }
@@ -554,5 +552,40 @@ Future<List<String>> getCatrol() async {
     print('An error occurred: $e');
   }
 
-  return rolesList;
+  return rolMap;
+}
+
+
+Future<void> updateInfoRoles(Map<String,List<dynamic>> usersFromHouse) async{
+
+    var url = Uri.parse("https://apihomeiot.online/v1.0/dbsql");
+
+    for (var user in usersFromHouse.entries) {
+      print("${user.key}: nuevo rol: ${user.value[0][0]}, id rol: ${user.value[0][1]}");
+      int cveRol = user.value[0][1];
+      int idPersona = user.value[0][2];
+      Map<String,dynamic> userJSON ={
+        "crud": "UPDATE",
+        "data": {
+          "PERSONA":{
+              "cve_tiporol": cveRol,
+              "where" : "id_persona = $idPersona"
+          }
+        }
+      };
+      String body = jsonEncode(userJSON);
+      print(body);
+      try {
+        final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: body);
+
+        if (response.statusCode == 200) {
+          print(response);
+          } else {
+            print('Request failed with status: ${response.statusCode}.');
+          }
+
+      } catch (e) {
+          print('An error occurred: $e');
+      }
+    }
 }
